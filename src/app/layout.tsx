@@ -2,15 +2,14 @@ import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import clsx from 'clsx'
 import './globals.css'
-import { SideBar } from '@/shared/components'
-import Header from '@/shared/components/header'
 import ApolloClientProvider from '@/shared/graphql/ApolloClientProvider'
+import { Footer, Header } from '@/shared/components'
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'] })
 
 export const metadata: Metadata = {
-  title: 'Library',
-  description: 'Library of books',
+  title: 'JobCV',
+  description: 'Job for Applicant',
 }
 
 export default function RootLayout({
@@ -20,13 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={clsx(roboto.className, 'flex p-2 gap-2 items-start')}>
+      <body className={clsx(roboto.className)}>
         <ApolloClientProvider>
-          <SideBar />
-          <div className="flex flex-col flex-grow bg-[#101010] rounded-lg">
-            <Header />
-            {children}
-          </div>
+          <Header />
+          {children}
+          <Footer />
         </ApolloClientProvider>
       </body>
     </html>

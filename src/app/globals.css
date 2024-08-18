@@ -20,30 +20,10 @@ html {
   overflow-x: hidden;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
 
-#ui {
-  background: -webkit-linear-gradient(
-    80deg,
-    #e0f8f7,
-    #faebf8,
-    #9ff1ef,
-    #03001e
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+
