@@ -4,6 +4,8 @@ import clsx from 'clsx'
 import './globals.css'
 import ApolloClientProvider from '@/shared/graphql/ApolloClientProvider'
 import { Footer, Header } from '@/shared/components'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'] })
 
@@ -24,6 +26,7 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+          <ToastContainer />
         </ApolloClientProvider>
       </body>
     </html>
