@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Một số quy ước
 
-## Getting Started
+### Quy ước đặt tên
 
-First, run the development server:
+- Tên biến: `camelCase`
+- Tên hàm: `camelCase`
+- Tên biến parameter: `camelCase`
+- Tên biến argument: `camelCase`
+- Tên biến private: `_camelCase`
+- Tên class: `PascalCase`
+- Tên hằng số: `UPPER_CASE`
+- Tên file: `kebab-case`
+- Tên thư mục: `kebab-case`
+
+### Quy ước viết code
+
+- Không dùng `var`
+- Không dùng `==`
+- Xóa `console.log` trước khi commit
+- Xóa `debugger` trước khi commit
+
+### Quy ước đặt commit message
+
+- Commit message có dạng: `type(module/entity): message` (ví dụ: `feat(user): add user feature`, `fix(user): cannot create user`)
+
+
+## Quy trình làm việc
+
+1. Tách nhánh từ `develop`
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git checkout -b branchName
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Sau khi code, thêm file muốn đẩy lên git vào staged
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+git add fileName
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+hoặc thêm tất cả file
 
-## Learn More
+```bash
+git add .
+```
 
-To learn more about Next.js, take a look at the following resources:
+3. Đặt commit message
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+git commit -m "feat(user): add user feature"
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+=> Chờ hệ thống kiểm tra lỗi, nếu xảy ra lỗi, giải quyết lỗi và quay lại bước 2
 
-## Deploy on Vercel
+4. Đẩy code lên git
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+git push
+```
