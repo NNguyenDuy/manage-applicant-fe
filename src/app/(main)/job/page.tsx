@@ -1,4 +1,11 @@
+import { ListJob } from './list-job'
+
 const Job = () => {
-  return <div>Job</div>
+  return (
+    <div>
+      Job
+      <ListJob />
+    </div>
+  )
 }
 export default Job
