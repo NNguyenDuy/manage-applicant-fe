@@ -26,10 +26,11 @@
 
 ## Quy trình làm việc
 
-1. Tách nhánh từ `develop`
+1. Tách nhánh từ `develop` | branchName: mã nhánh ví dụ: task01
 
 ```bash
 git checkout -b branchName
+git checkout -b task01
 ```
 
 2. Sau khi code, thêm file muốn đẩy lên git vào staged
