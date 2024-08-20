@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={clsx(roboto.className)}>
         <ApolloClientProvider>
           <Header />
-          {children}
+          <div className="mx-20 my-10">{children}</div>
           <Footer />
           <ToastContainer />
         </ApolloClientProvider>
