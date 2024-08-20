@@ -1,3 +1,3 @@
 export const Footer = () => {
-  return <div>Footer</div>
+  return <div className="mt-52">Footer</div>
 }
