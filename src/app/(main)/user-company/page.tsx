@@ -12,7 +12,7 @@ const UserCompany = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if (!user || user?.role !== 'recruiter') {
+    if (!loading && (!user || user?.role !== 'recruiter')) {
       router.push('/')
     }
   }, [loading, user, router])

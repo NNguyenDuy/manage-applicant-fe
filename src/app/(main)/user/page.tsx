@@ -12,7 +12,7 @@ const User = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if (!user || user?.role !== 'candidate') {
+    if (!loading && (!user || user?.role !== 'candidate')) {
       router.push('/')
     }
   }, [loading, user, router])
