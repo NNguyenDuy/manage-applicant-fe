@@ -55,9 +55,6 @@ const Login = () => {
   return (
     <div className="container mx-36 mt-10 flex">
       <div className="w-1/2">
-        <h1 className="text-primary font-bold text-2xl">
-          Chào mừng bạn đã quay trở lại
-        </h1>
         <p className="text-gray-500 leading-10">
           Cùng xây dựng một hồ sơ nổi bật và nhận được các cơ hội sự nghiệp lý
           tưởng
