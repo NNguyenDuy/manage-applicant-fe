@@ -3,7 +3,7 @@ import { Icons } from '#/icons'
 import { useRouter } from 'next/navigation'
 import { useState, useRef } from 'react'
 import Image from 'next/image'
-import { LOGIN } from '@/shared/graphql/queries'
+import { LOGIN } from '#/shared/graphql/queries'
 import { useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
 

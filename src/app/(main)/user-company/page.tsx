@@ -1,6 +1,6 @@
 'use client'
 
-import { GET_USER } from '@/shared/graphql/queries'
+import { GET_USER } from '#/shared/graphql/queries'
 import { DetailUserCompany } from './index'
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/navigation'

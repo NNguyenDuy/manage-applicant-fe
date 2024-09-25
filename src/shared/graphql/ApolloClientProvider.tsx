@@ -1,6 +1,6 @@
 'use client'
 import { ApolloProvider } from '@apollo/client'
-import client from '@/shared/graphql/apollo-client'
+import client from '#/shared/graphql/apollo-client'
 
 export default function ApolloClientProvider({
   children,
