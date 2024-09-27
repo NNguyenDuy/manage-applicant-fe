@@ -8,15 +8,15 @@ export const PATHS = {
   HOME: [
     {
       name: 'Việc làm',
-      path: `/job`,
+      path: `/jobs`,
     },
     {
       name: 'Công ty',
-      path: `/company`,
+      path: `/companies`,
     },
     {
-      name: 'Hồ sơ',
-      path: `/profile`,
+      name: 'Liên hệ',
+      path: `/contact`,
     },
     {
       name: 'Cẩm nang nghề nghiệp',

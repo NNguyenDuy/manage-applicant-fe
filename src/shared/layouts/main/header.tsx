@@ -3,23 +3,16 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { PATHS, ROOTS } from './routes'
-import { useQuery } from '@apollo/client'
-import { GET_USER } from '#/shared/graphql/queries'
 import { useEffect } from 'react'
+import { useAuth } from '#/shared/hook/use-auth'
 
 export const Header = () => {
   const pathname = usePathname()
-  const { data, error, refetch } = useQuery(GET_USER)
-  const user = data?.getInfoUser
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('auth')
-    refetch()
-  }
+  const { user, handleLogout } = useAuth()
 
   useEffect(() => {
-    refetch()
-  })
+    console.log(user)
+  }, [user])
 
   return (
     <header className="flex justify-between h-20 items-center px-8">
@@ -43,7 +36,7 @@ export const Header = () => {
           </Link>
         ))}
       </nav>
-      {error ? (
+      {!user ? (
         <div className="flex gap-10">
           <Link
             href={ROOTS.LOGIN}
@@ -64,9 +57,9 @@ export const Header = () => {
             <Link
               href={
                 user?.role === 'recruiter'
-                  ? '/user-company'
+                  ? '/recruiter'
                   : user?.role === 'candidate'
-                  ? '/user'
+                  ? '/candidate'
                   : user?.role === 'admin'
                   ? '/admin'
                   : '/'

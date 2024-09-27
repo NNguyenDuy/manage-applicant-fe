@@ -3,9 +3,10 @@ import { Roboto } from 'next/font/google'
 import clsx from 'clsx'
 import './globals.css'
 import ApolloClientProvider from '#/shared/graphql/ApolloClientProvider'
-import { Footer, Header } from '#/shared/layouts'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { AuthProvider } from '#/shared/hook/use-auth'
+import { AuthGuard } from '#/shared/hook/auth-guard'
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'] })
 
@@ -23,10 +24,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={clsx(roboto.className)}>
         <ApolloClientProvider>
-          <Header />
-          <div className="mx-20 my-10">{children}</div>
-          <Footer />
-          <ToastContainer />
+          <AuthProvider>
+            <AuthGuard>
+              <ToastContainer />
+              {children}
+            </AuthGuard>
+          </AuthProvider>
         </ApolloClientProvider>
       </body>
     </html>
