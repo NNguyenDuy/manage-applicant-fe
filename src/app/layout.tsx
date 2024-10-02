@@ -1,3 +1,4 @@
+import { ConfigProvider } from 'antd'
 import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import clsx from 'clsx'
@@ -23,14 +24,28 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={clsx(roboto.className)}>
-        <ApolloClientProvider>
-          <AuthProvider>
-            <AuthGuard>
-              <ToastContainer />
-              {children}
-            </AuthGuard>
-          </AuthProvider>
-        </ApolloClientProvider>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: '#00b14f',
+              colorSuccess: '#28a745',
+              colorWarning: '#ffc107',
+              colorError: '#da4538',
+              colorInfo: '#17a2b8',
+              colorBgLayout: '#f8f9fa',
+              colorText: '#343a40',
+            },
+          }}
+        >
+          <ApolloClientProvider>
+            <AuthProvider>
+              <AuthGuard>
+                <ToastContainer />
+                {children}
+              </AuthGuard>
+            </AuthProvider>
+          </ApolloClientProvider>
+        </ConfigProvider>
       </body>
     </html>
   )

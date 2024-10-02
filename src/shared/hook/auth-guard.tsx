@@ -3,7 +3,6 @@
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import HashLoader from 'react-spinners/HashLoader'
-
 import { useAuth } from './use-auth'
 
 const candidateRoute = '/candidate'
@@ -16,27 +15,29 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading) {
-      const token = localStorage.getItem('auth')
-      if (!token && user) {
-        refetchUser()
-      } else if (token && !user) {
-        refetchUser()
-      }
+    const token = localStorage.getItem('auth')
+
+    if (!loading && !token && !user) {
+      router.push('/login')
+      return
     }
-  }, [loading, user, refetchUser])
+
+    if (token && !user) {
+      refetchUser()
+    }
+  }, [loading, user, refetchUser, router])
 
   useEffect(() => {
-    if (!loading) {
-      if (user?.role !== 'admin' && pathname.startsWith(adminRoute)) {
+    if (!loading && user) {
+      if (user.role !== 'admin' && pathname.startsWith(adminRoute)) {
         router.push('/')
       } else if (
-        user?.role !== 'candidate' &&
+        user.role !== 'candidate' &&
         pathname.startsWith(candidateRoute)
       ) {
         router.push('/')
       } else if (
-        user?.role !== 'recruiter' &&
+        user.role !== 'recruiter' &&
         pathname.startsWith(recruiterRoute)
       ) {
         router.push('/')

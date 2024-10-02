@@ -3,16 +3,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { PATHS, ROOTS } from './routes'
-import { useEffect } from 'react'
 import { useAuth } from '#/shared/hook/use-auth'
 
 export const Header = () => {
   const pathname = usePathname()
   const { user, handleLogout } = useAuth()
-
-  useEffect(() => {
-    console.log(user)
-  }, [user])
 
   return (
     <header className="flex justify-between h-20 items-center px-8">
@@ -25,7 +20,7 @@ export const Header = () => {
           className="rounded-full"
         />
       </Link>
-      <nav className="flex gap-10 font-semibold text-secondary">
+      <nav className="flex gap-10 font-semibold ">
         {PATHS.HOME.map((item) => (
           <Link
             key={item.path}

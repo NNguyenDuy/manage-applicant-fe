@@ -1,31 +1,27 @@
-'use client'
-
-import { PATHS, ROOTS } from './routes'
+import { Layout, Menu } from 'antd'
 import Link from 'next/link'
+import { PATHS } from './routes'
+import { I_SideBarProps } from '#/shared/typescript'
 
-export const SideBar = () => {
+export const SideBar = ({ collapsed, setCollapsed }: I_SideBarProps) => {
   return (
-    <nav className="bg-gray-800 w-64 h-screen flex flex-col">
-      {/* Logo / Header */}
-      <div className="text-center text-white py-4">
-        <Link href={ROOTS.CANDIDATE} className="text-2xl font-bold">
-          Dashboard
-        </Link>
-      </div>
-
-      {/* Navigation Links */}
-      <ul className="flex flex-col space-y-4 p-4">
-        {PATHS.HOME.map((item, index) => (
-          <li key={index}>
-            <Link
-              href={item.path}
-              className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md p-2 block"
-            >
-              {item.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <Layout.Sider
+      trigger={null}
+      collapsible
+      collapsed={collapsed}
+      onCollapse={(value) => setCollapsed(value)}
+    >
+      <Menu
+        theme="light"
+        className="h-screen"
+        defaultSelectedKeys={['1']}
+        mode="inline"
+        items={PATHS.HOME.map((item) => ({
+          key: item.key,
+          icon: item.icon,
+          label: <Link href={item.path}>{item.label}</Link>,
+        }))}
+      />
+    </Layout.Sider>
   )
 }
