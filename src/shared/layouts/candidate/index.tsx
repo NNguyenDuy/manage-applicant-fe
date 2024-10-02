@@ -14,9 +14,9 @@ export const CandidateLayout = ({ children }: I_Children) => {
     <div className="flex">
       <SideBar collapsed={collapsed} setCollapsed={setCollapsed} />
 
-      <div className="flex-1 bg-gray-100 min-h-screen">
+      <div className="flex-1 p-1 bg-gray-100 min-h-screen">
         <Button
-          className="border-none ml-2"
+          className="border-none ml-1"
           icon={
             collapsed ? (
               <Icons.ArrowLeft className="rotate-180" size={25} />
@@ -26,7 +26,7 @@ export const CandidateLayout = ({ children }: I_Children) => {
           }
           onClick={() => setCollapsed(!collapsed)}
         />
-        <main className="p-8">{children}</main>
+        <main className="p-4">{children}</main>
       </div>
     </div>
   )
