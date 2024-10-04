@@ -17,11 +17,6 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const token = localStorage.getItem('auth')
 
-    if (!loading && !token && !user) {
-      router.push('/login')
-      return
-    }
-
     if (!loading && user && !token) {
       refetchUser()
     }
