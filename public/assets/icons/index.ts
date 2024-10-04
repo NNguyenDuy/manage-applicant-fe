@@ -15,6 +15,7 @@ import { MdWork } from 'react-icons/md'
 import { RiBuildingFill } from 'react-icons/ri'
 import { AiFillContacts } from 'react-icons/ai'
 import { MdTipsAndUpdates } from 'react-icons/md'
+import { IoIosClose } from 'react-icons/io'
 
 export const Icons = {
   FiEye,
@@ -35,4 +36,5 @@ export const Icons = {
   Company: RiBuildingFill,
   Contact: AiFillContacts,
   Tip: MdTipsAndUpdates,
+  Close: IoIosClose,
 }

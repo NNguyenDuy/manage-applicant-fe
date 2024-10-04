@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.4",
+    "@react-pdf-viewer/core": "^3.12.0",
+    "@react-pdf-viewer/default-layout": "^3.12.0",
     "antd": "^5.21.2",
     "clsx": "^2.1.1",
     "graphql": "^16.9.0",
