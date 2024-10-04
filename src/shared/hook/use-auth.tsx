@@ -9,6 +9,7 @@ import {
 } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import { usePathname, useRouter } from 'next/navigation'
+import { notification } from 'antd'
 
 import { GET_INFO_USER, LOGIN } from '#/shared/graphql/queries'
 import { I_User } from '../typescript'
@@ -58,6 +59,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         localStorage.setItem('auth', res.data.login.token)
         await refetchUser()
       }
+      res.data.login
+        ? notification.success({
+            message: 'Thành công',
+            description: 'Đăng nhập thành công',
+          })
+        : notification.error({
+            message: 'Thất bại',
+            description: 'Đăng nhập thất bại',
+          })
       return res.data.login
     } catch (error) {
       console.error('Login failed:', error)

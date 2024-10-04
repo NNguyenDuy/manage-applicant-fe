@@ -13,7 +13,7 @@ export enum ExperienceLevel {
 }
 
 export interface I_CandidateProfile {
-  skills: string[]
+  skills?: string[]
   experience: ExperienceLevel
   cvUrl?: string[]
 }
