@@ -2,9 +2,10 @@ import { Worker, Viewer } from '@react-pdf-viewer/core'
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'
 import { useMutation } from '@apollo/client'
 import { Icons } from '#/icons'
+import { UPDATE_CANDIDATE_PROFILE } from '#/shared/graphql/queries'
 import { useAuth } from '#/shared/hook/use-auth'
 import { useState } from 'react'
-import { Modal, Input, notification } from 'antd'
+import { Modal, Input, notification, Upload, Button } from 'antd'
 import { ListSkill } from './list-skill'
 
 export const ListCV: React.FC = () => {
@@ -17,10 +18,14 @@ export const ListCV: React.FC = () => {
       <div className="flex flex-col gap-4 w-full bg-c-white p-5 rounded-md">
         <div className="flex justify-between">
           <h1 className="font-semibold text-xl">CV đã upload trên JobCV</h1>
-          <button className="flex text-sm items-center gap-1 rounded-3xl p-2 px-3 bg-c-green text-white">
-            <Icons.Upload />
-            <span>Upload</span>
-          </button>
+          <Upload>
+            <Button
+              className="select-none cursor-pointer text-sm items-center gap-1 rounded-3xl p-2 px-3 bg-c-green text-white"
+              icon={<Icons.Upload />}
+            >
+              Upload
+            </Button>
+          </Upload>
         </div>
         <div className="flex flex-col gap-3">
           <h1 className="font-medium text-slate-700 opacity-90">
