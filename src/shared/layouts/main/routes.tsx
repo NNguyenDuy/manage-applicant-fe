@@ -25,7 +25,7 @@ export const PATHS = {
     },
     {
       name: 'Cẩm nang nghề nghiệp',
-      path: `/`,
+      path: `/tips`,
       icon: <Icons.Tip size={25} className="" />,
     },
   ],
