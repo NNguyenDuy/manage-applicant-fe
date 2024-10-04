@@ -46,7 +46,7 @@ export const CandidateLayout = ({ children }: I_Children) => {
                   <h3 className="text-sm">Chào bạn trở lại,</h3>
                   <span className="font-semibold">{user?.fullName}</span>
                 </div>
-                <span className="bg-[#808080] text-white text-xs p-1 px-2 rounded-sm">
+                <span className="bg-[#808089] text-white text-xs p-1 px-2 rounded-sm">
                   Tài khoản: {user?.role}
                 </span>
               </div>
