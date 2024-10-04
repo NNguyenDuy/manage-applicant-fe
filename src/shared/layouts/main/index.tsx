@@ -7,7 +7,7 @@ export const MainLayout = ({
   return (
     <>
       <Header />
-      <main className="p-2">{children}</main>
+      <main className="p-2 mt-16">{children}</main>
       <Footer />
     </>
   )
