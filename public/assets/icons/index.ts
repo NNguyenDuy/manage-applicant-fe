@@ -11,6 +11,10 @@ import { SiReaddotcv } from 'react-icons/si'
 import { IoIosCamera } from 'react-icons/io'
 import { FaPlus } from 'react-icons/fa'
 import { FaUpload } from 'react-icons/fa'
+import { MdWork } from 'react-icons/md'
+import { RiBuildingFill } from 'react-icons/ri'
+import { AiFillContacts } from 'react-icons/ai'
+import { MdTipsAndUpdates } from 'react-icons/md'
 
 export const Icons = {
   FiEye,
@@ -27,4 +31,8 @@ export const Icons = {
   Camera: IoIosCamera,
   Plus: FaPlus,
   Upload: FaUpload,
+  Work: MdWork,
+  Company: RiBuildingFill,
+  Contact: AiFillContacts,
+  Tip: MdTipsAndUpdates,
 }
