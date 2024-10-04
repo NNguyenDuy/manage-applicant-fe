@@ -11,9 +11,10 @@ import { useMutation, useQuery } from '@apollo/client'
 import { usePathname, useRouter } from 'next/navigation'
 
 import { GET_INFO_USER, LOGIN } from '#/shared/graphql/queries'
+import { I_User } from '../typescript'
 
 interface AuthContextType {
-  user: any
+  user: I_User | null
   loading: boolean
   handleLogin: (infoLogin: any) => Promise<any>
   handleLogout: () => void
@@ -25,7 +26,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<I_User | null>(null)
   const [login] = useMutation(LOGIN)
   const { refetch, loading: queryLoading } = useQuery(GET_INFO_USER)
   const pathname = usePathname()

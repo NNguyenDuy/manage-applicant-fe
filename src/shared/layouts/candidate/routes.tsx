@@ -17,6 +17,12 @@ export const PATHS: {
     },
     {
       key: '2',
+      label: 'Sơ yếu lý lịch',
+      icon: <Icons.CV />,
+      path: `${ROOTS.CANDIDATE}/cv-user`,
+    },
+    {
+      key: '3',
       label: 'Cài đặt',
       icon: <Icons.Setting />,
       path: `${ROOTS.CANDIDATE}/setting`,
