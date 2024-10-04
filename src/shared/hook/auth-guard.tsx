@@ -22,6 +22,10 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
       return
     }
 
+    if (!loading && user && !token) {
+      refetchUser()
+    }
+
     if (token && !user) {
       refetchUser()
     }
@@ -44,6 +48,13 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
       }
     }
   }, [pathname, user, loading, router])
+
+  useEffect(() => {
+    const token = localStorage.getItem('auth')
+    if (user && !token) {
+      refetchUser()
+    }
+  }, [pathname, user, refetchUser])
 
   if (loading) {
     return <HashLoader className="text-primary" loading={loading} size={50} />

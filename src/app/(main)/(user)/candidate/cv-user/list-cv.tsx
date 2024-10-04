@@ -1,7 +1,6 @@
 import { Icons } from '#/icons'
 import { useAuth } from '#/shared/hook/use-auth'
 import { DeleteOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
 
 export const ListCV = () => {
   const { user } = useAuth()
