@@ -4,7 +4,7 @@ import { ListCV } from './list-cv'
 
 const CVUser = () => {
   return (
-    <div className="w-4/6">
+    <div className="md:w-4/6  w-full">
       <ListCV />
     </div>
   )
