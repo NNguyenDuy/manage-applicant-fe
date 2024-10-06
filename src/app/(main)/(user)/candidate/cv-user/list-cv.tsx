@@ -1,16 +1,110 @@
 import { Worker, Viewer } from '@react-pdf-viewer/core'
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'
 import { useMutation } from '@apollo/client'
 import { Icons } from '#/icons'
 import { UPDATE_CANDIDATE_PROFILE } from '#/shared/graphql/queries'
 import { useAuth } from '#/shared/hook/use-auth'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Modal, Input, notification, Upload, Button } from 'antd'
 import { ListSkill } from './list-skill'
+import axios from 'axios'
 
 export const ListCV: React.FC = () => {
-  const defaultLayoutPluginInstance = defaultLayoutPlugin()
   const { user, refetchUser } = useAuth()
+  const [updateCandidateProfile] = useMutation(UPDATE_CANDIDATE_PROFILE)
+  const [loading, setLoading] = useState(false)
+  const [cvList, setCvList] = useState<string[]>([])
+
+  useEffect(() => {
+    if (user?.email) {
+      fetchCvList()
+    }
+  }, [user?.email])
+
+  const fetchCvList = async () => {
+    try {
+      const response = await axios.get(`/api/upload?email=${user?.email}`)
+      setCvList(response.data.cvUrls)
+    } catch (error) {
+      console.error('Lỗi khi lấy danh sách CV:', error)
+      notification.error({
+        message: 'Lấy danh sách CV thất bại',
+        description: 'Đã có lỗi xảy ra khi lấy danh sách CV!',
+      })
+    }
+  }
+
+  const handleUpdateProfile = async (cvUrl: string[]) => {
+    setLoading(true)
+    try {
+      await updateCandidateProfile({
+        variables: {
+          updateCandidateProfileId: user?.profileId,
+          cvUrl,
+        },
+      })
+
+      await refetchUser()
+      await fetchCvList()
+
+      notification.success({
+        message: 'Cập nhật thành công',
+        description: 'CV đã được cập nhật thành công!',
+      })
+    } catch (error) {
+      console.error('Error updating profile:', error)
+      notification.error({
+        message: 'Cập nhật thất bại',
+        description: 'Đã có lỗi xảy ra khi cập nhật CV!',
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleUploadCV = async (file: File) => {
+    if (file.type !== 'application/pdf') {
+      notification.error({
+        message: 'Upload thất bại',
+        description: 'Chỉ cho phép tải lên file PDF!',
+      })
+      return false
+    }
+
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('userEmail', user?.email as string)
+
+    try {
+      const response = await axios.post('/api/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      const newCvUrl = response.data.cvUrl
+      await handleUpdateProfile([...cvList, newCvUrl])
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          'Error uploading CV:',
+          error.response?.data || error.message
+        )
+        notification.error({
+          message: 'Upload thất bại',
+          description:
+            error.response?.data?.error || 'Đã có lỗi xảy ra khi upload CV!',
+        })
+      } else {
+        console.error('Unexpected error:', error)
+        notification.error({
+          message: 'Upload thất bại',
+          description: 'Đã có lỗi không xác định xảy ra!',
+        })
+      }
+    }
+
+    return false
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -18,10 +112,15 @@ export const ListCV: React.FC = () => {
       <div className="flex flex-col gap-4 w-full bg-c-white p-5 rounded-md">
         <div className="flex justify-between">
           <h1 className="font-semibold text-xl">CV đã upload trên JobCV</h1>
-          <Upload>
+          <Upload
+            accept=".pdf"
+            beforeUpload={handleUploadCV}
+            showUploadList={false}
+          >
             <Button
               className="select-none cursor-pointer text-sm items-center gap-1 rounded-3xl p-2 px-3 bg-c-green text-white"
               icon={<Icons.Upload />}
+              loading={loading}
             >
               Upload
             </Button>
@@ -32,27 +131,26 @@ export const ListCV: React.FC = () => {
             Danh sách CV
           </h1>
           <ul className="ml-2 grid grid-cols-2 gap-2">
-            {user?.candidateProfile?.cvUrl?.map((cv) => (
-              <li
-                className="rounded-3xl group cursor-pointer bg-c-gray p-1 px-2 flex items-center justify-center gap-2"
-                key={cv}
-              >
-                <div className="border rounded-lg shadow-md p-2 w-40 h-56 overflow-hidden flex items-center justify-center">
-                  <Worker
-                    workerUrl={`https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js`}
-                  >
-                    <Viewer
-                      fileUrl={cv.replace('/view', '/uc')}
-                      plugins={[defaultLayoutPluginInstance]}
-                    />
-                  </Worker>
-                </div>
-                <Icons.Close
-                  className="bg-[#e4e4e4] rounded-full text-slate-700 group-hover:bg-c-red group-hover:text-white duration-300"
-                  size={22}
-                />
-              </li>
-            ))}
+            {cvList.length === 0 ? (
+              <p>Không có CV nào để hiển thị.</p>
+            ) : (
+              cvList.map((cv) => (
+                <li
+                  className="rounded-3xl group cursor-pointer bg-c-gray p-1 px-2 flex items-center justify-center gap-2"
+                  key={cv}
+                >
+                  <div className="border rounded-lg shadow-md p-2 w-80 h-80 overflow-hidden flex items-center justify-center">
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.0.279/build/pdf.worker.min.js">
+                      <Viewer fileUrl={cv} initialPage={0} />
+                    </Worker>
+                  </div>
+                  <Icons.Close
+                    className="bg-[#e4e4e4] rounded-full text-slate-700 group-hover:bg-c-red group-hover:text-white duration-300"
+                    size={22}
+                  />
+                </li>
+              ))
+            )}
           </ul>
         </div>
       </div>
