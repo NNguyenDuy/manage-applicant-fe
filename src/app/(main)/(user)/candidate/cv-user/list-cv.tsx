@@ -13,6 +13,7 @@ export const ListCV: React.FC = () => {
   const [updateCandidateProfile] = useMutation(UPDATE_CANDIDATE_PROFILE)
   const [loading, setLoading] = useState(false)
   const [cvList, setCvList] = useState<string[]>([])
+  const [selectedPdf, setSelectedPdf] = useState<string | null>(null)
 
   useEffect(() => {
     if (user?.email) {
@@ -31,6 +32,14 @@ export const ListCV: React.FC = () => {
         description: 'Đã có lỗi xảy ra khi lấy danh sách CV!',
       })
     }
+  }
+
+  const handlePdfClick = (cv: string) => {
+    setSelectedPdf(cv)
+  }
+
+  const handleClosePdf = () => {
+    setSelectedPdf(null)
   }
 
   const handleUpdateProfile = async (cvUrl: string[]) => {
@@ -127,32 +136,38 @@ export const ListCV: React.FC = () => {
           </Upload>
         </div>
         <div className="flex flex-col gap-3">
-          <h1 className="font-medium text-slate-700 opacity-90">
-            Danh sách CV
-          </h1>
-          <ul className="ml-2 grid grid-cols-2 gap-2">
-            {cvList.length === 0 ? (
-              <p>Không có CV nào để hiển thị.</p>
-            ) : (
-              cvList.map((cv) => (
-                <li
-                  className="rounded-3xl group cursor-pointer bg-c-gray p-1 px-2 flex items-center justify-center gap-2"
-                  key={cv}
-                >
-                  <div className="border rounded-lg shadow-md p-2 w-80 h-80 overflow-hidden flex items-center justify-center">
+          <h2 className="font-medium text-gray-700">Danh sách CV</h2>
+          {cvList.length === 0 ? (
+            <p className="text-gray-500 italic">Không có CV nào để hiển thị.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {cvList.map((cv) => (
+                <div key={cv} className="relative group">
+                  <div
+                    className="border rounded-lg shadow-md p-2 w-full h-72 overflow-hidden cursor-pointer transition duration-300 hover:shadow-lg"
+                    onClick={() => handlePdfClick(cv)}
+                  >
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.0.279/build/pdf.worker.min.js">
-                      <Viewer fileUrl={cv} initialPage={0} />
+                      <Viewer fileUrl={cv} defaultScale={0.6} />
                     </Worker>
                   </div>
-                  <Icons.Close
-                    className="bg-[#e4e4e4] rounded-full text-slate-700 group-hover:bg-c-red group-hover:text-white duration-300"
-                    size={22}
-                  />
-                </li>
-              ))
-            )}
-          </ul>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+        <Modal
+          visible={!!selectedPdf}
+          onCancel={handleClosePdf}
+          footer={null}
+          width="70%"
+        >
+          {selectedPdf && (
+            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.0.279/build/pdf.worker.min.js">
+              <Viewer fileUrl={selectedPdf} />
+            </Worker>
+          )}
+        </Modal>
       </div>
     </div>
   )

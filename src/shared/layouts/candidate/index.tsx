@@ -29,7 +29,7 @@ export const CandidateLayout = ({ children }: I_Children) => {
           }
           onClick={() => setCollapsed(!collapsed)}
         />
-        <main className="p-4 flex gap-10">
+        <main className="p-4 flex gap-10 md:flex-row flex-col">
           {children}
 
           <div className="flex flex-col flex-1 gap-4 bg-c-white p-3 rounded-md">
