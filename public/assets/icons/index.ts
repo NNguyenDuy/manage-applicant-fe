@@ -16,6 +16,7 @@ import { RiBuildingFill } from 'react-icons/ri'
 import { AiFillContacts } from 'react-icons/ai'
 import { MdTipsAndUpdates } from 'react-icons/md'
 import { IoIosClose } from 'react-icons/io'
+import { MdFolderDelete } from 'react-icons/md'
 
 export const Icons = {
   FiEye,
@@ -37,4 +38,5 @@ export const Icons = {
   Contact: AiFillContacts,
   Tip: MdTipsAndUpdates,
   Close: IoIosClose,
+  FileDelete: MdFolderDelete,
 }

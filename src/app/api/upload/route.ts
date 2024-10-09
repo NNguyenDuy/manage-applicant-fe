@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile } from 'fs/promises'
+import { writeFile, unlink } from 'fs/promises'
 import { join } from 'path'
 import { sanitizeFileName } from '#/shared/utils'
 import { readdir } from 'fs/promises'
@@ -70,5 +70,28 @@ export async function GET(request: NextRequest) {
       { error: 'Lỗi khi lấy danh sách CV' },
       { status: 500 }
     )
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const fileName = request.nextUrl.searchParams.get('file')
+
+    if (!fileName) {
+      return NextResponse.json({ error: 'Thiếu tên file' }, { status: 400 })
+    }
+
+    const uploadDir = join(process.cwd(), 'public')
+    const filePath = join(uploadDir, fileName)
+
+    await unlink(filePath)
+
+    return NextResponse.json(
+      { message: 'Xóa file thành công' },
+      { status: 200 }
+    )
+  } catch (error) {
+    console.error('Lỗi khi xóa file:', error)
+    return NextResponse.json({ error: 'Lỗi khi xóa file' }, { status: 500 })
   }
 }
