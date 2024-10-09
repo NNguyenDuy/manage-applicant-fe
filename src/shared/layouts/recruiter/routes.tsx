@@ -25,7 +25,7 @@ export const PATHS: {
       key: '3',
       label: 'Cài đặt',
       icon: <Icons.Setting />,
-      path: `${ROOTS.RECRUITER}/setting`,
+      path: `${ROOTS.RECRUITER}/settings`,
     },
   ],
 }
