@@ -70,6 +70,27 @@ export const ListCV: React.FC = () => {
     }
   }
 
+  const handleDeleteCV = async (cv: string) => {
+    const confirm = Modal.confirm({
+      title: 'Xác nhận xóa CV',
+      content: 'Bạn có chắc chắn muốn xóa CV này không?',
+      okText: 'Xóa',
+      cancelText: 'Hủy',
+      onOk: async () => {
+        try {
+          const response = await axios.delete(`/api/upload?file=${cv}`)
+          await handleUpdateProfile(cvList.filter((item) => item !== cv))
+        } catch (error) {
+          console.error('Error deleting CV:', error)
+          notification.error({
+            message: 'Xóa thất bại',
+            description: 'Đã có lỗi xảy ra khi xóa CV!',
+          })
+        }
+      },
+    })
+  }
+
   const handleUploadCV = async (file: File) => {
     if (file.type !== 'application/pdf') {
       notification.error({
@@ -144,12 +165,25 @@ export const ListCV: React.FC = () => {
               {cvList.map((cv) => (
                 <div key={cv} className="relative group">
                   <div
-                    className="border rounded-lg shadow-md p-2 w-full h-72 overflow-hidden cursor-pointer transition duration-300 hover:shadow-lg"
+                    className="border rounded-lg shadow-md z-10 p-2 w-full h-72 overflow-hidden cursor-pointer transition duration-300 hover:shadow-lg relative"
                     onClick={() => handlePdfClick(cv)}
                   >
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.0.279/build/pdf.worker.min.js">
                       <Viewer fileUrl={cv} defaultScale={0.6} />
                     </Worker>
+                    <div className="absolute inset-0 z-10 bg-c-gray opacity-0 group-hover:opacity-70 transition-opacity duration-300"></div>
+                    <Icons.FiEye
+                      className="absolute top-1/2 left-1/2 z-20 opacity-0 group-hover:opacity-70 transform -translate-x-1/2 -translate-y-1/2 text-black duration-300"
+                      size={30}
+                    />
+                    <Icons.FileDelete
+                      className="absolute top-0 hover:scale-110 right-3 z-20 opacity-0 group-hover:opacity-70 transform text-black duration-300"
+                      size={30}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleDeleteCV(cv)
+                      }}
+                    />
                   </div>
                 </div>
               ))}
