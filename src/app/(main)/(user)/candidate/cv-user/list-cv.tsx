@@ -71,14 +71,14 @@ export const ListCV: React.FC = () => {
   }
 
   const handleDeleteCV = async (cv: string) => {
-    const confirm = Modal.confirm({
+    Modal.confirm({
       title: 'Xác nhận xóa CV',
       content: 'Bạn có chắc chắn muốn xóa CV này không?',
       okText: 'Xóa',
       cancelText: 'Hủy',
       onOk: async () => {
         try {
-          const response = await axios.delete(`/api/upload?file=${cv}`)
+          await axios.delete(`/api/upload?file=${cv}`)
           await handleUpdateProfile(cvList.filter((item) => item !== cv))
         } catch (error) {
           console.error('Error deleting CV:', error)
