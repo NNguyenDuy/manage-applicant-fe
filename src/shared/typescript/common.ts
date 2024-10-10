@@ -4,35 +4,85 @@ export interface I_Children {
   children: React.ReactNode | JSX.Element
 }
 
-export enum ExperienceLevel {
-  Under1Year = 'Under 1 Year',
-  OneToTwoYears = '1-2 Years',
-  TwoToThreeYears = '2-3 Years',
-  ThreeToFourYears = '3-4 Years',
-  Over5Years = 'Over 5 years',
-}
-
-export interface I_CandidateProfile {
-  skills?: string[]
-  experience: ExperienceLevel
-  cvUrl?: string[]
-}
-
-export interface I_Company {
-  name: string
-  address?: string
-  description?: string
+export enum E_Role {
+  ADMIN = 'admin',
+  RECRUITER = 'recruiter',
+  CANDIDATE = 'candidate',
 }
 
 export interface I_User {
-  fullName: string
+  fullName?: string
   email: string
-  role: string
-  companyId?: string
-  profileId?: string
-  company?: I_Company
+  password: string
+  role?: E_Role
   candidateProfile?: I_CandidateProfile
+  company?: I_Company
 }
+
+export interface I_Company {
+  _id: string;
+  name: string;
+  ownerId: string;
+  locationId?: string;
+  jobs?: string[];
+}
+
+export interface I_CandidateProfile {
+  _id: string;
+  userId: string;
+  resume: {
+    cvLinks: string[];
+    skills: {
+      name: string;
+      experience: number;
+    }[];
+  };
+  applications?: string[];
+}
+
+export interface I_Job {
+  _id: string;
+  title: string;
+  description: string;
+  companyId: string;
+  jobTypeId: string;
+  categoryIds: string[];
+  locationId: string;
+  candidates?: string[];
+}
+
+export interface I_JobType {
+  _id: string;
+  type: string;
+}
+
+export interface I_JobCategory {
+  _id: string;
+  name: string;
+}
+
+export interface I_Location {
+  _id: string;
+  address: string;
+  city: string;
+  country: string;
+}
+
+export enum E_ApplicationStatus {
+  SUBMITTED = 'submitted',
+  UNDER_REVIEW = 'under_review',
+  ACCEPTED = 'accepted',
+  REJECTED = 'rejected',
+}
+
+export interface I_Application {
+  _id: string;
+  jobId: string;
+  candidateProfileId: string;
+  status: E_ApplicationStatus;
+  appliedAt: string;
+}
+
 
 export interface I_SideBarProps {
   collapsed: boolean

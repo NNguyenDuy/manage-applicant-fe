@@ -1,4 +1,6 @@
+// import { ListJobs } from "./list-jobs"
+
 const Job = () => {
-  return <div>Danh sách job của web</div>
+  return <> <h1>haha</h1></>
 }
 export default Job

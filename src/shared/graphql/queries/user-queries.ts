@@ -2,25 +2,51 @@ import { gql } from '@apollo/client'
 
 export const GET_INFO_USER = gql`
   query GetInfoUser {
-    getInfoUser {
+  getInfoUser {
+    _id
+    fullName
+    email
+    role
+    candidateProfile {
       _id
-      fullName
-      email
-      role
-      companyId
-      profileId
-      company {
-        _id
-        name
-        address
-        description
+      userId
+      resume {
+        cvLinks
+        skills {
+          name
+          experience
+        }
       }
-      candidateProfile {
+      applications {
         _id
-        skills
-        experience
-        cvUrl
+        jobId
+        candidateProfileId
+        status
+        appliedAt
+      }
+    }
+    company {
+      _id
+      name
+      ownerId
+      locationId
+      jobs {
+        _id
+        title
+        description
+        companyId
+        jobTypeId
+        categoryIds {
+          _id
+          name
+        }
+        locationId
+        candidates {
+          _id
+          userId
+        }
       }
     }
   }
+}
 `

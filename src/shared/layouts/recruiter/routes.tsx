@@ -27,5 +27,11 @@ export const PATHS: {
       icon: <Icons.Setting />,
       path: `${ROOTS.RECRUITER}/settings`,
     },
+    {
+      key: '4',
+      label: 'Tìm kiếm công việc',
+      icon: <Icons.Setting />,
+      path: `${ROOTS.RECRUITER}/find-jobs`,
+    },
   ],
 }
