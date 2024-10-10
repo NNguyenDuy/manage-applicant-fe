@@ -34,13 +34,20 @@ export const GET_INFO_USER = gql`
         _id
         title
         description
-        companyId
-        jobTypeId
+        jobType {
+          _id
+          type
+        }
+        location {
+          _id
+          address
+          city
+          country
+        }
         categoryIds {
           _id
           name
         }
-        locationId
         candidates {
           _id
           userId

@@ -1,14 +1,54 @@
 import { gql } from '@apollo/client'
 
 export const GET_JOBS = gql`
-query GetAllJobs {
+  query GetAllJobs {
   getAllJobs {
     _id
     title
     description
-    salary
-    position
-    recruiterId
+    location {
+      _id
+      address
+      city
+      country
+    }
+    company {
+      _id
+      name
+      ownerId
+      locationId
+      jobs {
+        _id
+        title
+        description
+      }
+    }
+    categoryIds {
+      _id
+      name
+    }
+    candidates {
+      _id
+      userId
+      resume {
+        cvLinks
+        skills {
+          name
+          experience
+        }
+      }
+      applications {
+        _id
+        jobId
+        candidateProfileId
+        status
+        appliedAt
+      }
+    }
+    jobType {
+      type
+      _id
+    }
   }
 }
 `
