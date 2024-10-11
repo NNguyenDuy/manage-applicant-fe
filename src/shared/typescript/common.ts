@@ -21,20 +21,20 @@ export interface I_User {
 
 export interface I_Company {
   _id: string;
-  name: string;
-  ownerId: string;
+  name?: string;
+  ownerId?: string;
   locationId?: string;
-  jobs?: string[];
+  jobs?: I_Job[];
 }
 
 export interface I_CandidateProfile {
   _id: string;
-  userId: string;
-  resume: {
-    cvLinks: string[];
-    skills: {
-      name: string;
-      experience: number;
+  userId?: string;
+  resume?: {
+    cvLinks?: string[];
+    skills?: {
+      name?: string;
+      experience?: number;
     }[];
   };
   applications?: string[];
@@ -42,13 +42,13 @@ export interface I_CandidateProfile {
 
 export interface I_Job {
   _id: string;
-  title: string;
-  description: string;
-  companyId: string;
-  jobTypeId: string;
-  categoryIds: string[];
-  locationId: string;
-  candidates?: string[];
+  title?: string;
+  description?: string;
+  companyId?: string;
+  jobTypeId?: string;
+  categoryIds?: string[];
+  locationId?: string;
+  candidates?: I_CandidateProfile[];
 }
 
 export interface I_JobType {
@@ -77,10 +77,10 @@ export enum E_ApplicationStatus {
 
 export interface I_Application {
   _id: string;
-  jobId: string;
-  candidateProfileId: string;
-  status: E_ApplicationStatus;
-  appliedAt: string;
+  jobId?: string;
+  candidateProfileId?: string;
+  status?: E_ApplicationStatus;
+  appliedAt?: string;
 }
 
 
