@@ -5,8 +5,8 @@ import { useQuery } from "@apollo/client";
 export const ListJobs: React.FC = () => {
   const { data, loading, error } = useQuery(GET_JOBS);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
 
   const jobs = data?.getAllJobs || [];
 
@@ -14,16 +14,7 @@ export const ListJobs: React.FC = () => {
 
   return (
     <div>
-      <h1>List Jobs</h1>
-      {jobs.length > 0 ? (
-        <ul>
-          {jobs.map((job: any) => (
-            <li key={job.id}>{job.title}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No jobs found.</p>
-      )}
+      ádasdasda
     </div>
   );
 };

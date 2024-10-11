@@ -25,6 +25,7 @@ export interface I_Company {
   ownerId?: string;
   locationId?: string;
   jobs?: I_Job[];
+  location: I_Location;
 }
 
 export interface I_CandidateProfile {
