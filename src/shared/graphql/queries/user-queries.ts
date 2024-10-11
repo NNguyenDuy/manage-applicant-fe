@@ -17,13 +17,6 @@ export const GET_INFO_USER = gql`
           experience
         }
       }
-      applications {
-        _id
-        jobId
-        candidateProfileId
-        status
-        appliedAt
-      }
     }
     company {
       _id
