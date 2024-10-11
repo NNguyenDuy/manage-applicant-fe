@@ -39,7 +39,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const { data } = await refetch();
       setUser(data?.getInfoUser || null);
-      console.log(data?.getInfoUser);
     } catch (error) {
       console.error("Failed to fetch user info:", error);
       setUser(null);

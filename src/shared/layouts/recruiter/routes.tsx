@@ -33,5 +33,12 @@ export const PATHS: {
       icon: <Icons.Setting />,
       path: `${ROOTS.RECRUITER}/find-jobs`,
     },
+    {
+      key: '5',
+      label: 'Quản lý ứng tuyển',
+      icon: <Icons.Setting />,
+      path: `${ROOTS.RECRUITER}/job-recruiter`,
+    },
+    
   ],
 }
