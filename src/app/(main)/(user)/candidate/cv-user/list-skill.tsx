@@ -3,7 +3,8 @@ import { Icons } from '#/icons'
 import { useAuth } from '#/shared/hook/use-auth'
 import { UPDATE_CANDIDATE_PROFILE } from '#/shared/graphql/queries'
 import { useState } from 'react'
-import { Modal, Input, notification } from 'antd'
+import { Modal, Input, Select, notification } from 'antd'
+import { I_Skill } from '#/shared/typescript'
 
 export const ListSkill = () => {
   const { user, refetchUser } = useAuth()
@@ -13,16 +14,26 @@ export const ListSkill = () => {
   const [loading, setLoading] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [newSkill, setNewSkill] = useState('')
+  const [newExperience, setNewExperience] = useState(0)
   const [isConfirmVisible, setIsConfirmVisible] = useState(false)
   const [skillToRemove, setSkillToRemove] = useState('')
 
-  const handleUpdateProfile = async (skills: string[]) => {
+  const experienceOptions = Array.from({ length: 11 }, (_, i) => ({
+    label: `${i} năm`,
+    value: i,
+  }))
+
+  const handleUpdateProfile = async (skills: I_Skill[]) => {
     setLoading(true)
+
     try {
       await updateCandidateProfile({
         variables: {
-          updateCandidateProfileId: user?.profileId,
-          skills,
+          updateCandidateProfileId: user?.candidateProfile?._id,
+          resume: {
+            skills,
+            cvLinks: user?.candidateProfile?.resume?.cvLinks || '',
+          },
         },
       })
 
@@ -44,19 +55,23 @@ export const ListSkill = () => {
   }
 
   const handleAddSkill = () => {
-    const updatedSkills = [...(user?.candidateProfile?.skills || []), newSkill]
+    const updatedSkills: I_Skill[] = [
+      ...(user?.candidateProfile?.resume?.skills || []),
+      { name: newSkill, experience: newExperience },
+    ]
     handleUpdateProfile(updatedSkills)
 
     setIsModalVisible(false)
     setNewSkill('')
+    setNewExperience(0)
   }
 
   const handleRemoveSkill = () => {
     if (!skillToRemove) return
 
-    const updatedSkills =
-      user?.candidateProfile?.skills?.filter(
-        (skill) => skill !== skillToRemove
+    const updatedSkills: I_Skill[] =
+      user?.candidateProfile?.resume?.skills?.filter(
+        (skill: I_Skill) => skill?.name !== skillToRemove
       ) || []
     handleUpdateProfile(updatedSkills)
 
@@ -84,14 +99,16 @@ export const ListSkill = () => {
         <h1 className="font-medium text-slate-700 opacity-90">
           Danh sách kĩ năng
         </h1>
-        <ul className="ml-2 grid grid-cols-4 gap-2">
-          {user?.candidateProfile?.skills?.map((skill) => (
+        <ul className="ml-2 grid grid-cols-3 gap-2">
+          {user?.candidateProfile?.resume?.skills?.map((skill: I_Skill) => (
             <li
               className="rounded-3xl group cursor-pointer bg-c-gray p-1 px-4 flex items-center justify-center gap-2"
-              key={skill}
-              onClick={() => showConfirm(skill)}
+              key={skill?.name}
+              onClick={() => showConfirm(skill?.name || '')}
             >
-              <span>{skill}</span>
+              <span>
+                {skill?.name} - {skill?.experience} năm
+              </span>
               <Icons.Close
                 className="bg-[#e4e4e4] rounded-full text-slate-700 group-hover:bg-c-red group-hover:text-white duration-300 cursor-pointer"
                 size={22}
@@ -111,6 +128,13 @@ export const ListSkill = () => {
           placeholder="Nhập kỹ năng mới"
           value={newSkill}
           onChange={(e) => setNewSkill(e.target.value)}
+        />
+        <Select
+          placeholder="Chọn số năm kinh nghiệm"
+          options={experienceOptions}
+          value={newExperience}
+          onChange={(value) => setNewExperience(value)}
+          className="mt-3 w-1/2"
         />
       </Modal>
 

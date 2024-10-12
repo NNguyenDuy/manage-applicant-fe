@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { Modal, Input, notification, Upload, Button } from 'antd'
 import { ListSkill } from './list-skill'
 import axios from 'axios'
+import { PDFViewerWrapper } from './PDFViewerWrapper'
 
 export const ListCV: React.FC = () => {
   const { user, refetchUser } = useAuth()
@@ -47,8 +48,11 @@ export const ListCV: React.FC = () => {
     try {
       await updateCandidateProfile({
         variables: {
-          updateCandidateProfileId: user?.profileId,
-          cvUrl,
+          updateCandidateProfileId: user?.candidateProfile?._id,
+          resume: {
+            skills: user?.candidateProfile?.resume?.skills,
+            cvLinks: cvUrl,
+          },
         },
       })
 
@@ -168,9 +172,7 @@ export const ListCV: React.FC = () => {
                     className="border rounded-lg shadow-md z-10 p-2 w-full h-72 overflow-hidden cursor-pointer transition duration-300 hover:shadow-lg relative"
                     onClick={() => handlePdfClick(cv)}
                   >
-                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.0.279/build/pdf.worker.min.js">
-                      <Viewer fileUrl={cv} defaultScale={0.6} />
-                    </Worker>
+                    <PDFViewerWrapper fileUrl={cv} />
                     <div className="absolute inset-0 z-10 bg-c-gray opacity-0 group-hover:opacity-70 transition-opacity duration-300"></div>
                     <Icons.FiEye
                       className="absolute top-1/2 left-1/2 z-20 opacity-0 group-hover:opacity-70 transform -translate-x-1/2 -translate-y-1/2 text-black duration-300"
@@ -194,13 +196,9 @@ export const ListCV: React.FC = () => {
           visible={!!selectedPdf}
           onCancel={handleClosePdf}
           footer={null}
-          width="70%"
+          width="80%"
         >
-          {selectedPdf && (
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.0.279/build/pdf.worker.min.js">
-              <Viewer fileUrl={selectedPdf} />
-            </Worker>
-          )}
+          {selectedPdf && <PDFViewerWrapper fileUrl={selectedPdf} />}
         </Modal>
       </div>
     </div>

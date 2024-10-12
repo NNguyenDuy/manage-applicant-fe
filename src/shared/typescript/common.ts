@@ -20,53 +20,55 @@ export interface I_User {
 }
 
 export interface I_Company {
-  _id: string;
-  name?: string;
-  ownerId?: string;
-  locationId?: string;
-  jobs?: I_Job[];
-  location: I_Location;
+  _id: string
+  name?: string
+  ownerId?: string
+  locationId?: string
+  jobs?: I_Job[]
+  location: I_Location
+}
+
+export interface I_Skill {
+  name: string
+  experience: number
 }
 
 export interface I_CandidateProfile {
-  _id: string;
-  userId?: string;
+  _id: string
+  userId?: string
   resume?: {
-    cvLinks?: string[];
-    skills?: {
-      name?: string;
-      experience?: number;
-    }[];
-  };
-  applications?: string[];
+    cvLinks?: string[]
+    skills?: I_Skill[]
+  }
+  applications?: string[]
 }
 
 export interface I_Job {
-  _id: string;
-  title?: string;
-  description?: string;
-  companyId?: string;
-  jobTypeId?: string;
-  categoryIds?: string[];
-  locationId?: string;
-  candidates?: I_CandidateProfile[];
+  _id: string
+  title?: string
+  description?: string
+  companyId?: string
+  jobTypeId?: string
+  categoryIds?: string[]
+  locationId?: string
+  candidates?: I_CandidateProfile[]
 }
 
 export interface I_JobType {
-  _id: string;
-  type: string;
+  _id: string
+  type: string
 }
 
 export interface I_JobCategory {
-  _id: string;
-  name: string;
+  _id: string
+  name: string
 }
 
 export interface I_Location {
-  _id: string;
-  address: string;
-  city: string;
-  country: string;
+  _id: string
+  address: string
+  city: string
+  country: string
 }
 
 export enum E_ApplicationStatus {
@@ -77,13 +79,12 @@ export enum E_ApplicationStatus {
 }
 
 export interface I_Application {
-  _id: string;
-  jobId?: string;
-  candidateProfileId?: string;
-  status?: E_ApplicationStatus;
-  appliedAt?: string;
+  _id: string
+  jobId?: string
+  candidateProfileId?: string
+  status?: E_ApplicationStatus
+  appliedAt?: string
 }
-
 
 export interface I_SideBarProps {
   collapsed: boolean
@@ -96,5 +97,3 @@ export interface I_PathItem {
   icon: ReactNode
   path: string
 }
-
-
