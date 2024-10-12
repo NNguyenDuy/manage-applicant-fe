@@ -7,3 +7,22 @@ export const LOGIN = gql`
     }
   }
 `
+export const REGISTER = gql`
+  mutation Register(
+    $email: String!
+    $password: String!
+    $fullName: String
+    $role: String!
+    $company: CompanyInput
+  ) {
+    register(
+      email: $email
+      password: $password
+      fullName: $fullName
+      role: $role
+      company: $company
+    ) {
+      token
+    }
+  }
+`

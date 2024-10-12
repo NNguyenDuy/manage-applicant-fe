@@ -115,7 +115,7 @@ export const Header = () => {
             <button className="hover:scale-125 duration-200 hover:stroke-blue-500">
               <Avatar size={50} className="relative">
                 <span className="absolute text-black font-semibold inset-0 flex items-center justify-center">
-                  {user?.fullName.split(' ').pop()}
+                  {user?.fullName?.split(' ').pop()}
                 </span>
               </Avatar>
             </button>
