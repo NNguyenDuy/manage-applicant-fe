@@ -17,6 +17,8 @@ import { AiFillContacts } from 'react-icons/ai'
 import { MdTipsAndUpdates } from 'react-icons/md'
 import { IoIosClose } from 'react-icons/io'
 import { MdFolderDelete } from 'react-icons/md'
+import { TiLocation } from 'react-icons/ti'
+import { FaUser } from "react-icons/fa";
 
 export const Icons = {
   FiEye,
@@ -39,4 +41,6 @@ export const Icons = {
   Tip: MdTipsAndUpdates,
   Close: IoIosClose,
   FileDelete: MdFolderDelete,
+  Location: TiLocation,
+  User: FaUser
 }
