@@ -85,7 +85,7 @@ export const Header = () => {
         </div>
       </div>
       {!user ? (
-        <div className="hidden lg:flex gap-10">
+        <div className="flex sm:gap-10 gap-2">
           <Link
             href={ROOTS.LOGIN}
             className="border text-primary rounded-sm border-primary px-4 py-2 font-bold"
