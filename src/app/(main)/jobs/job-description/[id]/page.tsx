@@ -2,13 +2,14 @@
 
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
-import { GET_JOB } from "#/shared/graphql/queries"; // Giả sử bạn có query này để lấy job theo id
+import { GET_JOB } from "#/shared/graphql/queries";
 import React from "react";
+import Link from "next/link";
 
 const JobDescription = ({ params }: { params: { id: string } }) => {
   const { data, loading, error } = useQuery(GET_JOB, {
     variables: { id: params.id },
-    skip: !params.id, // Chỉ chạy query khi đã có id
+    skip: !params.id,
   });
 
   if (loading) return <p>Đang tải...</p>;
@@ -18,12 +19,9 @@ const JobDescription = ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="bg-gray-100 p-4">
-      {/* Breadcrumb */}
       <div className="text-sm text-green-600 mb-4">
-        Trang chủ `&gt;` Tìm việc làm {job.title} `&gt;` Tuyển {job.title}
+        <Link href={'/'}> Trang chủ</Link> &gt; Tìm việc làm {job.title} &gt; Tuyển {job.title}
       </div>
-
-      {/* Job Title Section */}
       <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
         <h1 className="text-3xl font-bold mb-2">{job.title}</h1>
         <div className="flex items-center text-gray-600 mb-4">
@@ -50,10 +48,7 @@ const JobDescription = ({ params }: { params: { id: string } }) => {
           </button>
         </div>
       </div>
-
-      {/* Job Detail Section */}
       <div className="grid grid-cols-3 gap-6">
-        {/* Job Description */}
         <div className="col-span-2 bg-white p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold mb-4">Chi tiết tin tuyển dụng</h2>
           <h3 className="text-lg font-semibold mb-2">Mô tả công việc</h3>
@@ -72,8 +67,6 @@ const JobDescription = ({ params }: { params: { id: string } }) => {
             </ul>
           </ul>
         </div>
-
-        {/* Company Info Section */}
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <div className="text-center">
             <img
@@ -103,8 +96,6 @@ const JobDescription = ({ params }: { params: { id: string } }) => {
           </a>
         </div>
       </div>
-
-      {/* General Info Section */}
       <div className="grid grid-cols-3 gap-6 mt-6">
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <h3 className="text-xl font-bold">Thông tin chung</h3>

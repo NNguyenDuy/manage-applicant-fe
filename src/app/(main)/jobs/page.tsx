@@ -5,16 +5,16 @@ import SearchJob from './searchJob';
 import ListJobs from './list-jobs';
 
 const JobPage = () => {
-  const [filters, setFilters] = useState({ name: '', location: '', JCategory: '' });
+  const [filters, setFilters] = useState({ Jtitle: '', Jlocation: '', JCategory: '' });
 
-  const handleSearch = (name: string, location: string, JCategory: string) => {
-    setFilters({ name, location, JCategory });
+  const handleSearch = (Jtitle: string, Jlocation: string, JCategory: string) => {
+    setFilters({ Jtitle, Jlocation, JCategory });
   };
 
   return (
     <>
       <SearchJob onSearch={handleSearch} />
-      <ListJobs name={filters.name} location={filters.location} jCategory={filters.JCategory} />
+      <ListJobs name={filters.Jtitle} location={filters.Jlocation} jCategory={filters.JCategory} />
     </>
   );
 };

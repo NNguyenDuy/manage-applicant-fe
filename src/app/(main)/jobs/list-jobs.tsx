@@ -7,8 +7,8 @@ const ListJobs = ({ name, location, jCategory }: { name: string, location: strin
 
   const { data: filteredData, loading: filteredLoading, error: filteredError } = useQuery(GET_JOB_WITH_FILTERS, {
     variables: {
-      title: name || "",
-      location: location || "",
+      jtitle: name || "",
+      jlocation: location || "",
       jCategory: jCategory || ""
     },
     skip: !(name || location || jCategory),
