@@ -66,24 +66,6 @@ query GetJobsWithFilters($jtitle: String, $jlocation: String, $jCategory: String
       _id
       name
     }
-    candidates {
-      _id
-      userId
-      resume {
-        cvLinks
-        skills {
-          name
-          experience
-        }
-      }
-      applications {
-        _id
-        jobId
-        candidateProfileId
-        status
-        appliedAt
-      }
-    }
   }
 }
 `
