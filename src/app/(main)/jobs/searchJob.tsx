@@ -1,30 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
-import { GET_LOCATIONS } from "#/shared/graphql/queries/location-queries";
 import { GET_ALL_JOBCATEGORY } from "#/shared/graphql/queries/category-queries"; // Import GET_ALL_JOBCATEGORY
 import { FaSearch, FaMapMarkerAlt, FaBriefcase } from "react-icons/fa";
 
 const SearchJob = ({
   onSearch,
 }: {
-  onSearch: (name: string, location: string, jCategory: string) => void;
+  onSearch: (jtitle: string, Jlocation: string, jCategory: string) => void;
 }) => {
-  const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
-  const [jCategory, setJCategory] = useState(""); // Thay thế jType bằng jCategory
+  const [jtitle, setJtitle] = useState("");
+  const [Jlocation, setJlocation] = useState("");
+  const [jCategory, setJCategory] = useState("");
+  const [vietnamProvinces, setVietnamProvinces] = useState([]);
+  
   const {
-    data: locationData,
-    loading: locationLoading,
-    error: locationError,
-  } = useQuery(GET_LOCATIONS);
-  const {
-    data: jobCategoryData, // Đổi tên biến để dễ hiểu
+    data: jobCategoryData,
     loading: jobCategoryLoading,
     error: jobCategoryError,
-  } = useQuery(GET_ALL_JOBCATEGORY); // Sử dụng GET_ALL_JOBCATEGORY thay vì GET_ALL_JOBTYPES
+  } = useQuery(GET_ALL_JOBCATEGORY);
+
+  // Fetch provinces from Vietnam API
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        const response = await fetch('https://provinces.open-api.vn/api/?depth=1');
+        const data = await response.json();
+        setVietnamProvinces(data); // Set provinces data
+      } catch (error) {
+        console.error('Error fetching provinces:', error);
+      }
+    };
+
+    fetchProvinces();
+  }, []); // Only fetch once when the component is mounted
 
   const handleSearch = () => {
-    onSearch(name, location, jCategory); // Truyền jCategory thay vì jType
+    onSearch(jtitle, Jlocation, jCategory); 
   };
 
   return (
@@ -32,8 +43,8 @@ const SearchJob = ({
       <div className="flex items-center bg-white rounded-full shadow-md p-2">
         <input
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={jtitle}
+          onChange={(e) => setJtitle(e.target.value)}
           placeholder="Nhập tên công việc"
           className="flex-grow px-4 py-2 rounded-full focus:outline-none text-gray-700"
         />
@@ -43,16 +54,16 @@ const SearchJob = ({
               <FaMapMarkerAlt className="text-gray-500" />
             </div>
             <select
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              value={Jlocation}
+              onChange={(e) => setJlocation(e.target.value)}
               className="appearance-none p-3 pl-10 border border-gray-300 rounded-full w-full pr-8 text-gray-700"
             >
               <option value="">Tất cả thành phố</option>
-              {locationData?.getAllLocation?.length > 0 &&
-                locationData.getAllLocation.map(
-                  (loc: { _id: string; name: string }) => (
-                    <option key={loc._id} value={loc.name}>
-                      {loc.name}
+              {vietnamProvinces.length > 0 &&
+                vietnamProvinces.map(
+                  (province: { code: string; name: string }) => (
+                    <option key={province.code} value={province.name}>
+                      {province.name}
                     </option>
                   )
                 )}
@@ -81,7 +92,7 @@ const SearchJob = ({
             </div>
             <select
               value={jCategory}
-              onChange={(e) => setJCategory(e.target.value)} // Sử dụng setJCategory thay vì setjType
+              onChange={(e) => setJCategory(e.target.value)} 
               className="appearance-none p-3 pl-10 border border-gray-300 rounded-full w-full pr-8 text-gray-700"
             >
               <option value="">Tất cả danh mục</option>
@@ -107,7 +118,6 @@ const SearchJob = ({
                 <path
                   fillRule="evenodd"
                   d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clipRule="evenodd"
                 />
               </svg>
             </div>

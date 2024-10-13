@@ -34,26 +34,6 @@ export const GET_JOBS_BY_COMPANY_ID = gql`
     }
   }
 `
-// export const GET_JOB_BY_CONDITION = gql`
-//   query GetJobByCondition(
-//     $title: String!
-//     $position: String!
-//     $salary: Float!
-//   ) {
-//     getJobByCondition(title: $title, position: $position, salary: $salary) {
-//       _id
-//       title
-//       description
-//       salary
-//       position
-//       recruiterId
-//       applicants {
-//         userId
-//         cvUrl
-//       }
-//     }
-//   }
-// `
 export const GET_JOB_WITH_FILTERS = gql`
 query GetJobsWithFilters($jtitle: String, $jlocation: String, $jCategory: String) {
   getJobsWithFilters(Jtitle: $jtitle, Jlocation: $jlocation, JCategory: $jCategory) {
