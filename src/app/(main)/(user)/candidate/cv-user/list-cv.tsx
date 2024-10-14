@@ -48,10 +48,10 @@ export const ListCV: React.FC = () => {
     try {
       await updateCandidateProfile({
         variables: {
-          updateCandidateProfileId: user?.candidateProfile?._id,
+          updateCandidateProfileId: user?.candidateId,
           resume: {
-            skills: user?.candidateProfile?.resume?.skills,
             cvLinks: cvUrl,
+            skills: user?.candidate?.resume?.skills,
           },
         },
       })
@@ -116,6 +116,7 @@ export const ListCV: React.FC = () => {
       })
 
       const newCvUrl = response.data.cvUrl
+
       await handleUpdateProfile([...cvList, newCvUrl])
     } catch (error) {
       if (axios.isAxiosError(error)) {

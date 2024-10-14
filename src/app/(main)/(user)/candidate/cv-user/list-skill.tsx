@@ -29,10 +29,10 @@ export const ListSkill = () => {
     try {
       await updateCandidateProfile({
         variables: {
-          updateCandidateProfileId: user?.candidateProfile?._id,
+          updateCandidateProfileId: user?.candidateId,
           resume: {
+            cvLinks: user?.candidate?.resume?.cvLinks,
             skills,
-            cvLinks: user?.candidateProfile?.resume?.cvLinks || '',
           },
         },
       })
@@ -54,11 +54,9 @@ export const ListSkill = () => {
     }
   }
 
-  console.log(user)
-
   const handleAddSkill = () => {
     const updatedSkills: I_Skill[] = [
-      ...(user?.candidateProfile?.resume?.skills || []),
+      ...(user?.candidate?.resume?.skills || []),
       { name: newSkill, experience: newExperience },
     ]
     handleUpdateProfile(updatedSkills)
@@ -72,7 +70,7 @@ export const ListSkill = () => {
     if (!skillToRemove) return
 
     const updatedSkills: I_Skill[] =
-      user?.candidateProfile?.resume?.skills?.filter(
+      user?.candidate?.resume?.skills?.filter(
         (skill: I_Skill) => skill?.name !== skillToRemove
       ) || []
     handleUpdateProfile(updatedSkills)
