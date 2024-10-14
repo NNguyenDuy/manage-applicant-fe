@@ -86,21 +86,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           password: infoLogin.password,
         },
       })
+
       if (res.data.login) {
+        notification.success({
+          message: 'Thành công',
+          description: 'Đăng nhập thành công',
+        })
         localStorage.setItem('auth', res.data.login.token)
         await refetchUser()
+      } else {
+        notification.error({
+          message: 'Thất bại',
+          description: 'Đăng nhập thất bại',
+        })
       }
-      res.data.login
-        ? notification.success({
-            message: 'Thành công',
-            description: 'Đăng nhập thành công',
-          })
-        : notification.error({
-            message: 'Thất bại',
-            description: 'Đăng nhập thất bại',
-          })
+
       return res.data.login
     } catch (error) {
+      notification.error({
+        message: 'Lỗi',
+        description:
+          'Đã xảy ra lỗi trong quá trình đăng nhập. Vui lòng thử lại.',
+      })
       return null
     }
   }
