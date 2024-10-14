@@ -40,7 +40,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const { data } = await refetch()
       setUser(data?.getInfoUser || null)
     } catch (error) {
-      console.error('Failed to fetch user info:', error)
       setUser(null)
     }
   }, [refetch])
@@ -75,7 +74,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           })
       return res.data.register
     } catch (error) {
-      console.error('Register failed:', error)
       return null
     }
   }
@@ -103,7 +101,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           })
       return res.data.login
     } catch (error) {
-      console.error('Login failed:', error)
       return null
     }
   }

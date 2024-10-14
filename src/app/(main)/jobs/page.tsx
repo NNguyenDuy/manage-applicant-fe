@@ -1,14 +1,21 @@
 "use client";
 
-import { ListJobs } from "./list-jobs";
+import { useState } from 'react';
+import SearchJob from './searchJob';
+import ListJobs from './list-jobs';
 
-const Job = () => {
+const JobPage = () => {
+  const [filters, setFilters] = useState({ Jtitle: '', Jlocation: '', JCategory: '' });
+
+  const handleSearch = (Jtitle: string, Jlocation: string, JCategory: string) => {
+    setFilters({ Jtitle, Jlocation, JCategory });
+  };
+
   return (
     <>
-      <h1>
-        <ListJobs />
-      </h1>
+      <SearchJob onSearch={handleSearch} />
+      <ListJobs name={filters.Jtitle} location={filters.Jlocation} jCategory={filters.JCategory} />
     </>
   );
 };
-export default Job;
+export default JobPage;
