@@ -23,6 +23,12 @@ export const PATHS: {
     },
     {
       key: '3',
+      label: 'Công việc ứng tuyển',
+      icon: <Icons.Apply />,
+      path: `${ROOTS.CANDIDATE}/applications-user`,
+    },
+    {
+      key: '4',
       label: 'Cài đặt',
       icon: <Icons.Setting />,
       path: `${ROOTS.CANDIDATE}/settings`,

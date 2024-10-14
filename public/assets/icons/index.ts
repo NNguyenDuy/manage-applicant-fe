@@ -18,7 +18,8 @@ import { MdTipsAndUpdates } from 'react-icons/md'
 import { IoIosClose } from 'react-icons/io'
 import { MdFolderDelete } from 'react-icons/md'
 import { TiLocation } from 'react-icons/ti'
-import { FaUser } from "react-icons/fa";
+import { FaUser } from 'react-icons/fa'
+import { VscGitStashApply } from 'react-icons/vsc'
 
 export const Icons = {
   FiEye,
@@ -42,5 +43,6 @@ export const Icons = {
   Close: IoIosClose,
   FileDelete: MdFolderDelete,
   Location: TiLocation,
-  User: FaUser
+  User: FaUser,
+  Apply: VscGitStashApply,
 }

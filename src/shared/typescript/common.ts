@@ -58,6 +58,13 @@ export interface I_Job {
   categoryIds?: string[]
   locationId?: string
   candidates?: I_CandidateProfile[]
+  salary?: number
+  experience?: number
+  deadline?: string
+  headcount?: number
+  createdAt?: string
+  updatedAt?: string
+  company?: I_Company
 }
 
 export interface I_JobType {
@@ -90,7 +97,10 @@ export interface I_Application {
   jobId?: string
   candidateProfileId?: string
   status?: E_ApplicationStatus
+  selectedCvLink?: string
   appliedAt?: string
+  isDel?: boolean
+  job?: I_Job
 }
 
 export interface I_SideBarProps {

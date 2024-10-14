@@ -40,3 +40,11 @@ export const GET_INFO_USER = gql`
     }
   }
 `
+
+export const UPDATE_USER = gql`
+  mutation UpdateUser($updateUserId: ID!, $fullName: String) {
+    updateUser(id: $updateUserId, fullName: $fullName) {
+      fullName
+    }
+  }
+`
