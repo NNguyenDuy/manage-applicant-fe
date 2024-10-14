@@ -54,6 +54,8 @@ export const ListSkill = () => {
     }
   }
 
+  console.log(user)
+
   const handleAddSkill = () => {
     const updatedSkills: I_Skill[] = [
       ...(user?.candidateProfile?.resume?.skills || []),
@@ -100,7 +102,7 @@ export const ListSkill = () => {
           Danh sách kĩ năng
         </h1>
         <ul className="ml-2 grid grid-cols-3 gap-2">
-          {user?.candidateProfile?.resume?.skills?.map((skill: I_Skill) => (
+          {user?.candidate?.resume?.skills?.map((skill: I_Skill) => (
             <li
               className="rounded-3xl group cursor-pointer bg-c-gray p-1 px-4 flex items-center justify-center gap-2"
               key={skill?.name}

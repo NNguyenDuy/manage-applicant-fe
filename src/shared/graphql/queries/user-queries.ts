@@ -7,9 +7,11 @@ export const GET_INFO_USER = gql`
       fullName
       email
       role
-      candidateProfile {
-        _id
-        userId
+      candidateId
+      companyId
+      idDel
+      candidate {
+        id
         resume {
           cvLinks
           skills {
@@ -17,40 +19,22 @@ export const GET_INFO_USER = gql`
             experience
           }
         }
+        idDel
       }
       company {
-        _id
+        id
         name
-        ownerId
+        description
+        size
+        field
         locationId
-        jobs {
-          _id
-          title
-          description
-          jobType {
-            _id
-            type
-          }
-          location {
-            _id
-            address
-            city
-            country
-          }
-          categoryIds {
-            _id
-            name
-          }
-          candidates {
-            _id
-            userId
-          }
-        }
+        idDel
         location {
           _id
           address
           city
           country
+          idDel
         }
       }
     }

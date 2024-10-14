@@ -11,19 +11,25 @@ export enum E_Role {
 }
 
 export interface I_User {
-  fullName?: string
+  _id: string
+  fullName: string
   email: string
   password: string
-  role?: E_Role
-  candidateProfile?: I_CandidateProfile
+  role: E_Role
+  candidateId?: string
+  companyId?: string
+  candidate?: I_CandidateProfile
   company?: I_Company
 }
 
 export interface I_Company {
   _id: string
-  name?: string
-  ownerId?: string
-  locationId?: string
+  name: string
+  description: string
+  size: number
+  field: string
+  locationId: string
+  idDel: boolean
   jobs?: I_Job[]
   location: I_Location
 }
@@ -69,6 +75,7 @@ export interface I_Location {
   address: string
   city: string
   country: string
+  idDel: boolean
 }
 
 export enum E_ApplicationStatus {
