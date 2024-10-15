@@ -20,6 +20,8 @@ import { MdFolderDelete } from 'react-icons/md'
 import { TiLocation } from 'react-icons/ti'
 import { FaUser } from 'react-icons/fa'
 import { VscGitStashApply } from 'react-icons/vsc'
+import { FaEye } from 'react-icons/fa'
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
 
 export const Icons = {
   FiEye,
@@ -45,4 +47,6 @@ export const Icons = {
   Location: TiLocation,
   User: FaUser,
   Apply: VscGitStashApply,
+  Eye: FaEye,
+  Money: RiMoneyDollarCircleLine,
 }
