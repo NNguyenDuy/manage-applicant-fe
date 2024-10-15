@@ -1,26 +1,42 @@
-"use client";
+'use client';
 
-import { useQuery } from "@apollo/client";
-import { GET_JOB_BY_ID } from "#/shared/graphql/queries";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_JOB_BY_ID, UPDATE_ISDEL } from "#/shared/graphql/queries"; // Mutation UPDATE_ISDEL để cập nhật trạng thái idDel
 import React from "react";
 import Link from "next/link";
 
-const JobDescription = ({ params }: { params: { id: string } }) => {
-  const { data, loading, error } = useQuery(GET_JOB_BY_ID, {
+const ManageJobDescription = ({ params }: { params: { id: string } }) => {
+  const { data, loading, error, refetch } = useQuery(GET_JOB_BY_ID, {
     variables: { jobId: params.id },
     skip: !params.id,
   });
+
+  const [updateIsDel] = useMutation(UPDATE_ISDEL);
 
   if (loading) return <p>Đang tải...</p>;
   if (error) return <p>Có lỗi xảy ra: {error.message}</p>;
 
   const job = data?.getJobById;
+  const handleToggleJobStatus = async () => {
+    try {
+      await updateIsDel({
+        variables: {
+          jobId: job.id,
+          isDel: !job.idDel, 
+        },
+      });
+      refetch();
+      alert(`Tin tuyển dụng đã được ${job.idDel ? "mở" : "ẩn"} thành công.`);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật trạng thái tin tuyển dụng:", error);
+    }
+  };
 
   return (
     <div className="bg-gray-100 p-4">
       <div className="text-sm text-green-600 mb-4">
-        <Link href={"/"}> Trang chủ</Link> &gt; Tìm việc làm {job?.title} &gt;
-        Tuyển {job?.title}
+        <Link href={"/"}> Trang chủ</Link> &gt; Quản lý công việc {job?.title} &gt;
+        {job?.title}
       </div>
       <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
         <h1 className="text-3xl font-bold mb-2">{job?.title}</h1>
@@ -45,11 +61,16 @@ const JobDescription = ({ params }: { params: { id: string } }) => {
           <strong>{new Date(job?.deadline).toLocaleDateString()}</strong>
         </div>
         <div className="flex space-x-4">
-          <button className="bg-green-600 text-white py-2 px-6 rounded-full hover:bg-green-700">
-            Ứng tuyển ngay
-          </button>
-          <button className="border border-green-600 text-green-600 py-2 px-6 rounded-full hover:bg-gray-200">
-            Lưu tin
+          {/* Hiển thị nút dựa trên trạng thái idDel */}
+          <button
+            className={`py-2 px-6 rounded-full ${
+              job?.idDel
+                ? "bg-green-600 text-white hover:bg-green-700" // Nút "Mở tin tuyển dụng" khi isDel = true
+                : "bg-red-600 text-white hover:bg-red-700" // Nút "Ẩn tin tuyển dụng" khi isDel = false
+            }`}
+            onClick={handleToggleJobStatus}
+          >
+            {job?.idDel ? "Mở tin tuyển dụng" : "Ẩn tin tuyển dụng"}
           </button>
         </div>
       </div>
@@ -107,7 +128,8 @@ const JobDescription = ({ params }: { params: { id: string } }) => {
               <span>{job?.experience ? "Năm" : ""}</span>
             </li>
             <li>
-              <strong>Số lượng tuyển:</strong> {job?.headcount || "Không rõ"} <span>{job?.headcount?"Người" :"" }</span>
+              <strong>Số lượng tuyển:</strong> {job?.headcount || "Không rõ"}{" "}
+              <span>{job?.headcount ? "Người" : ""}</span>
             </li>
             <li>
               <strong>Hình thức làm việc:</strong>{" "}
@@ -120,4 +142,4 @@ const JobDescription = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default JobDescription;
+export default ManageJobDescription;
