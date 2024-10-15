@@ -99,6 +99,7 @@ export interface I_Application {
   status?: E_ApplicationStatus
   selectedCvLink?: string
   appliedAt?: string
+  evaluationAI?: string
   isDel?: boolean
   job?: I_Job
 }

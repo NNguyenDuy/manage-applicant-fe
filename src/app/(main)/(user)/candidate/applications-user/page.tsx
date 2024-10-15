@@ -1,16 +1,17 @@
 'use client'
 
-import { GET_APPLICATION_BY_CANDIDATE } from '#/shared/graphql/queries/application-queries'
-import { useAuth } from '#/shared/hook/use-auth'
-import { E_ApplicationStatus, I_Application } from '#/shared/typescript'
-import { capitalizeFirstLetter, statusApply } from '#/shared/utils'
-import { useQuery } from '@apollo/client'
-import { Image, Modal, Select, Spin, Pagination } from 'antd'
 import dayjs from 'dayjs'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { useQuery } from '@apollo/client'
+import { Image, Modal, Select, Spin, Pagination } from 'antd'
+
+import { useAuth } from '#/shared/hook/use-auth'
+import { E_ApplicationStatus, I_Application } from '#/shared/typescript'
+import { capitalizeFirstLetter, statusApply } from '#/shared/utils'
 import { PDFViewerWrapper } from '../cv-user/PDFViewerWrapper'
 import { Icons } from '#/icons'
+import { GET_APPLICATION_BY_CANDIDATE } from '#/shared/graphql/queries/application-queries'
 
 const ApplicationUser = () => {
   const { user } = useAuth()
@@ -87,25 +88,25 @@ const ApplicationUser = () => {
             {data?.getApplicationByCandidate.items.map(
               (application: I_Application) => (
                 <div
-                  key={application._id}
                   className="border-b border-gray-200 p-4"
+                  key={application._id}
                 >
                   <div className="flex items-center justify-start gap-5">
                     <Image
-                      src={application?.job?.company?.name}
+                      className="border-2 border-gray-200 shadow-sm object-cover"
                       width={80}
                       height={80}
+                      src={application?.job?.company?.name}
                       fallback={`https://ui-avatars.com/api/?name=${application?.job?.company?.name}`}
                       alt="Company Logo"
                       preview={false}
-                      className="border-2 border-gray-200 shadow-sm object-cover"
                     />
                     <div className="flex flex-col w-full">
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center justify-between">
                           <Link
-                            href={''}
                             className="font-bold text-lg hover:underline"
+                            href={''}
                           >
                             {application?.job?.title}
                           </Link>
@@ -141,10 +142,10 @@ const ApplicationUser = () => {
                             </span>
                           </p>
                           <div
+                            className="flex text-c-green bg-green-200 gap-2 items-center p-3 rounded-2xl py-1 cursor-pointer"
                             onClick={() =>
                               handlePdfClick(application?.selectedCvLink || '')
                             }
-                            className="flex text-c-green bg-green-200 gap-2 items-center p-3 rounded-2xl py-1 cursor-pointer"
                           >
                             <Icons.Eye size={23} />
                             <span>Xem CV</span>
@@ -183,10 +184,10 @@ const ApplicationUser = () => {
       </div>
 
       <Modal
+        width="80%"
         open={isModalOpen}
         onCancel={handleClosePdf}
         footer={null}
-        width="80%"
       >
         {selectedPdf && <PDFViewerWrapper fileUrl={selectedPdf} />}
       </Modal>
