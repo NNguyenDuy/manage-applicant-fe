@@ -4,6 +4,7 @@ import { useAuth } from '#/shared/hook/use-auth';
 import { useQuery } from '@apollo/client';
 import { GET_MAINTAIN_JOBS_BY_COMPANY } from '#/shared/graphql/queries/jobs-queries';
 import Link from 'next/link';
+
 export const ListJob = () => {
   const { user } = useAuth();
 
@@ -25,16 +26,17 @@ export const ListJob = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6 text-center">Danh sách công việc</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
         {data?.getMaintainJobsByCompany.map((job: any) => (
           <div
             key={job.id}
             className={`bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer ${selectedJobId === job.id ? 'ring-2 ring-green-500' : ''}`}
             onClick={() => handleJobClick(job.id)}
           >
-            <h2 className="text-2xl font-semibold mb-2">{job.title}</h2>
+            <Link href={`job-recruiter/job-description/${job.id}`}>
+              <h2 className="text-2xl font-semibold mb-2">{job.title}</h2>
+            </Link>
             <p className="text-gray-600 mb-4">{job.description}</p>
-            
+
             <div className="text-gray-500">
               <p><strong>Lương:</strong> {job.salary ? job.salary.toLocaleString('vi-VN') + ' VND' : 'Thỏa thuận'}</p>
               <p><strong>Kinh nghiệm:</strong> {job.experience || 'Không yêu cầu'} năm</p>
@@ -45,7 +47,6 @@ export const ListJob = () => {
               <p><strong>Trạng thái:</strong> {job.idDel ? 'Đã ẩn' : 'Đang hiển thị'}</p>
             </div>
 
-            {/* Hiển thị thông tin chi tiết khi nhấp vào công việc */}
             {selectedJobId === job.id && (
               <div className="mt-4">
                 <h3 className="text-lg font-semibold">Thông tin công ty:</h3>
@@ -54,7 +55,6 @@ export const ListJob = () => {
                 <p><strong>Quy mô:</strong> {job.company?.size || 'Không rõ'}</p>
                 <p><strong>Lĩnh vực:</strong> {job.company?.field || 'Không rõ'}</p>
 
-                {/* Địa chỉ công ty */}
                 <div className="mt-2">
                   <h4 className="text-md font-semibold">Địa chỉ công ty:</h4>
                   <p>{job.location?.address || 'Không rõ'}, {job.location?.city || 'Không rõ'}, {job.location?.country || 'Không rõ'}</p>

@@ -28,60 +28,54 @@ export const GET_APPLICATION_BY_CANDIDATE = gql`
     }
   }
 `;
-export const GET_APPLICATION_BY_COMPANY = gql`
-  query GetApplicationsByCompany($companyId: ID!) {
-    getApplicationsByCompany(companyId: $companyId) {
-      _id
-      selectedCvLink
-      status
-      appliedAt
-      isDel
-      job {
+export const GET_APPLICATION_BY_ID = gql`
+query GetApplicationsByJob($jobId: ID!) {
+  getApplicationsByJob(jobId: $jobId) {
+    _id
+    jobId
+    candidateProfileId
+    selectedCvLink
+    status
+    appliedAt
+    isDel
+    job {
+      id
+      title
+      description
+      salary
+      experience
+      deadline
+      createdAt
+      updatedAt
+      headcount
+      idDel
+      company {
         id
-        title
+        name
         description
-        salary
-        experience
-        deadline
-        createdAt
-        updatedAt
-        headcount
+        size
+        field
+        locationId
         idDel
-        company {
-          id
-          name
-          description
-          size
-          field
-          locationId
-          idDel
-        }
-        jobType {
-          _id
-          type
-          idDel
-        }
-        category {
-          _id
-          name
-          idDel
-        }
-        location {
-          _id
-          address
-          city
-          country
-          idDel
-        }
+      }
+      jobType {
+        _id
+        type
+        idDel
+      }
+      category {
+        _id
+        name
+        idDel
+      }
+      location {
+        _id
+        address
+        city
+        country
+        idDel
       }
     }
-  }
-`;
-export const UPDATE_APPLICATION_STATUS = gql`
-  mutation UpdateApplicationStatus($updateApplicationStatusId: ID!, $newStatus: E_ApplicationStatus!) {
-  updateApplicationStatus(id: $updateApplicationStatusId, newStatus: $newStatus) {
-    status
-    isDel
   }
 }
 `;
