@@ -18,3 +18,17 @@ export interface I_UserInput {
   role: E_Role
   company?: I_CompanyInput
 }
+
+export interface I_CandidateUserInput extends I_UserInput {
+  candidateId?: string; 
+  companyId?: string; 
+  company?: I_CompanyInput;
+  name?: string;
+  location?: I_LocationInput
+  resume?: {
+    skills: Array<{
+      name: string;
+      experience: number;
+    }>;
+  };
+}
