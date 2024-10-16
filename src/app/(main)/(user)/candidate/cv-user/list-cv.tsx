@@ -46,13 +46,15 @@ export const ListCV: React.FC = () => {
   }
 
   const handleUpdateProfile = async (cvUrl: string[]) => {
-    setLoading(true)
+    const filteredCvList = cvUrl
+      .filter((cv) => cv.includes('/uploads'))
+      .map((cv) => cv.substring(cv.indexOf('/uploads')))
     try {
       await updateCandidateProfile({
         variables: {
           updateCandidateProfileId: user?.candidateId,
           resume: {
-            cvLinks: cvUrl,
+            cvLinks: filteredCvList,
             skills: user?.candidate?.resume?.skills,
           },
         },
