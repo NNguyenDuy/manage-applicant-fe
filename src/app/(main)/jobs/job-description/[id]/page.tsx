@@ -21,6 +21,7 @@ const JobDescription = ({ params }: { params: { id: string } }) => {
       <div className="text-sm text-green-600 mb-4">
         <Link href={"/"}> Trang chủ</Link> &gt; Tìm việc làm {job?.title} &gt;
         Tuyển {job?.title}
+        
       </div>
       <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
         <h1 className="text-3xl font-bold mb-2">{job?.title}</h1>
