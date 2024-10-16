@@ -29,7 +29,7 @@ export const PATHS: {
     },
     {
       key: '4',
-      label: 'Tìm kiếm công việc',
+      label: 'Danh sách công việc',
       icon: <Icons.Setting />,
       path: `${ROOTS.RECRUITER}/find-jobs`,
     },
