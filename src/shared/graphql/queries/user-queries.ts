@@ -48,3 +48,51 @@ export const UPDATE_USER = gql`
     }
   }
 `
+export const GET_ALL_USERS = gql`
+  query GetAllUsers {
+    getAllUsers {
+      _id
+      fullName
+      email
+      role
+      candidateId
+      companyId
+      idDel
+    }
+  }
+`
+
+export const GET_CANDIDATE_PROFILE = gql`
+  query GetCandidateProfile($userId: ID!) {
+    getCandidateProfile(userId: $userId) {
+      _id
+      fullName
+      email
+      skills {
+        name
+        experience
+      }
+      resume {
+        cvLinks
+        skills {
+          name
+          experience
+        }
+      }
+    }
+  }
+`;
+
+export const GET_COMPANY = gql`
+  query GetCompany($userId: ID!) {
+    getCompany(userId: $userId) {
+      _id
+      name
+      location {
+        address
+        city
+        country
+      }
+    }
+  }
+`;
