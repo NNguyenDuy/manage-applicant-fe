@@ -8,7 +8,7 @@ import { Table, Button, Modal, Form, Input, Select, notification, Tooltip } from
 import { I_CandidateUserInput, I_UserInput } from '#/shared/typescript/authenticate';
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import client from '#/shared/graphql/apollo-client';
-import { E_Role } from '#/shared/typescript/roleDefinitions';
+import { E_Role } from '#/shared/typescript/common';
 
 const { Option } = Select;
 
