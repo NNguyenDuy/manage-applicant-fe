@@ -1,16 +1,36 @@
-'use client'; 
+'use client'
 
-import { useQuery, useMutation } from '@apollo/client';
-import { GET_ALL_USERS, GET_CANDIDATE_PROFILE, GET_COMPANY } from '#/shared/graphql/queries/user-queries';
-import { CREATE_USER, UPDATE_USER, DELETE_USER } from '#/shared/graphql/mutations/user-mutations';
-import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, Select, notification, Tooltip } from 'antd';
-import { I_CandidateUserInput, I_UserInput } from '#/shared/typescript/authenticate';
-import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import client from '#/shared/graphql/apollo-client';
-import { E_Role } from '#/shared/typescript/common';
+import { useQuery, useMutation } from '@apollo/client'
+import {
+  GET_ALL_USERS,
+  GET_CANDIDATE_PROFILE,
+  GET_COMPANY,
+} from '#/shared/graphql/queries/user-queries'
+import {
+  CREATE_USER,
+  UPDATE_USER,
+  DELETE_USER,
+} from '#/shared/graphql/mutations/user-mutations'
+import React, { useState, useEffect } from 'react'
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  notification,
+  Tooltip,
+} from 'antd'
+import {
+  I_CandidateUserInput,
+  I_UserInput,
+} from '#/shared/typescript/authenticate'
+import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons'
+import client from '#/shared/graphql/apollo-client'
+import { E_Role } from '#/shared/typescript/common'
 
-const { Option } = Select;
+const { Option } = Select
 
 const ManagedUsers = () => {
   const [userData, setUserData] = useState<I_UserInput>({
@@ -18,118 +38,121 @@ const ManagedUsers = () => {
     password: '',
     fullName: '',
     role: E_Role.CANDIDATE,
-  });
-  const [selectedUser, setSelectedUser] = useState<I_CandidateUserInput | null>(null);
-  const [users, setUsers] = useState<I_UserInput[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [isViewMode, setIsViewMode] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  })
+  const [selectedUser, setSelectedUser] = useState<I_CandidateUserInput | null>(
+    null
+  )
+  const [users, setUsers] = useState<I_UserInput[]>([])
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
+  const [isViewMode, setIsViewMode] = useState(false)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
-  const { data, loading, error, refetch } = useQuery(GET_ALL_USERS);
-  
-  const [createUser] = useMutation(CREATE_USER);
-  const [updateUser] = useMutation(UPDATE_USER);
-  const [deleteUser] = useMutation(DELETE_USER);
+  const { data, loading, error, refetch } = useQuery(GET_ALL_USERS)
+
+  const [createUser] = useMutation(CREATE_USER)
+  const [updateUser] = useMutation(UPDATE_USER)
+  const [deleteUser] = useMutation(DELETE_USER)
 
   useEffect(() => {
     if (data) {
-      const filteredUsers = data.getAllUsers.filter((user: I_UserInput) => user.role !== E_Role.ADMIN);
-      setUsers(filteredUsers);
+      const filteredUsers = data.getAllUsers.filter(
+        (user: I_UserInput) => user.role !== E_Role.ADMIN
+      )
+      setUsers(filteredUsers)
     }
-  }, [data]);
+  }, [data])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
-  };
+    const { name, value } = e.target
+    setUserData({ ...userData, [name]: value })
+  }
 
   const handleRoleChange = (value: E_Role) => {
-    setUserData({ ...userData, role: value });
-  };
+    setUserData({ ...userData, role: value })
+  }
 
   const validateEmail = (email: string) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return regex.test(email)
+  }
 
   const checkEmailExists = (email: string) => {
-    return users.some(user => user.email === email);
-  };
-  
+    return users.some((user) => user.email === email)
+  }
 
   const handleCreate = async () => {
     if (!userData.fullName) {
-      notification.error({ message: 'Tên không được để trống' });
-      return;
+      notification.error({ message: 'Tên không được để trống' })
+      return
     }
-  
+
     if (!userData.email) {
-      notification.error({ message: 'Email không được để trống' });
-      return;
+      notification.error({ message: 'Email không được để trống' })
+      return
     }
-  
+
     if (!userData.password) {
-      notification.error({ message: 'Mật khẩu không được để trống' });
-      return;
+      notification.error({ message: 'Mật khẩu không được để trống' })
+      return
     }
-  
+
     if (!validateEmail(userData.email)) {
-      notification.error({ message: 'Email không hợp lệ' });
-      return;
+      notification.error({ message: 'Email không hợp lệ' })
+      return
     }
-  
+
     if (checkEmailExists(userData.email)) {
-      notification.error({ message: 'Email đã tồn tại' });
-      return;
+      notification.error({ message: 'Email đã tồn tại' })
+      return
     }
-  
+
     try {
       const { data } = await createUser({
         variables: {
           ...userData,
           role: userData.role,
         },
-      });
-      notification.success({ message: 'Tạo người dùng thành công' });
-      setIsModalVisible(false);
-      refetch();
+      })
+      notification.success({ message: 'Tạo người dùng thành công' })
+      setIsModalVisible(false)
+      refetch()
     } catch (error: unknown) {
       if (error instanceof Error) {
         notification.error({
           message: 'Lỗi khi tạo người dùng',
           description: error.message || 'Đã có lỗi xảy ra',
-        });
+        })
       }
     }
-  };
-  
+  }
+
   const handleUpdate = async () => {
     if (!userData.fullName) {
-      notification.error({ message: 'Tên không được để trống' });
-      return;
+      notification.error({ message: 'Tên không được để trống' })
+      return
     }
-  
+
     if (!userData.email) {
-      notification.error({ message: 'Email không được để trống' });
-      return;
+      notification.error({ message: 'Email không được để trống' })
+      return
     }
-  
+
     if (!userData.password) {
-      notification.error({ message: 'Mật khẩu không được để trống' });
-      return;
+      notification.error({ message: 'Mật khẩu không được để trống' })
+      return
     }
-  
+
     if (!validateEmail(userData.email)) {
-      notification.error({ message: 'Email không hợp lệ' });
-      return;
+      notification.error({ message: 'Email không hợp lệ' })
+      return
     }
-  
+
     if (checkEmailExists(userData.email)) {
-      notification.error({ message: 'Email đã tồn tại' });
-      return;
+      notification.error({ message: 'Email đã tồn tại' })
+      return
     }
-  
+
     try {
       await updateUser({
         variables: {
@@ -137,20 +160,19 @@ const ManagedUsers = () => {
           ...userData,
           role: userData.role,
         },
-      });
-      notification.success({ message: 'Cập nhật người dùng thành công' });
-      setIsModalVisible(false);
-      refetch();
+      })
+      notification.success({ message: 'Cập nhật người dùng thành công' })
+      setIsModalVisible(false)
+      refetch()
     } catch (error: unknown) {
       if (error instanceof Error) {
         notification.error({
           message: 'Cập nhật người dùng thất bại',
           description: error.message || 'Đã có lỗi xảy ra',
-        });
+        })
       }
     }
-  };
-  
+  }
 
   const handleDelete = async (userId: string) => {
     Modal.confirm({
@@ -160,68 +182,73 @@ const ManagedUsers = () => {
         try {
           await deleteUser({
             variables: { id: userId },
-          });
-          notification.success({ message: 'Xóa người dùng thành công' });
-          refetch();
+          })
+          notification.success({ message: 'Xóa người dùng thành công' })
+          refetch()
         } catch (error: unknown) {
           if (error instanceof Error) {
             notification.error({
               message: 'Xóa người dùng thất bại',
               description: error.message || 'Đã có lỗi xảy ra',
-            });
+            })
           }
         }
       },
-    });
-  };
+    })
+  }
 
   const openModal = (user?: I_UserInput) => {
     if (user) {
-      setUserData(user);
-      setIsEditMode(true);
+      setUserData(user)
+      setIsEditMode(true)
     } else {
-      setUserData({ email: '', password: '', fullName: '', role: E_Role.CANDIDATE });
-      setCurrentUserId(null);
-      setIsEditMode(false);
+      setUserData({
+        email: '',
+        password: '',
+        fullName: '',
+        role: E_Role.CANDIDATE,
+      })
+      setCurrentUserId(null)
+      setIsEditMode(false)
     }
-    setIsModalVisible(true);
-  };
+    setIsModalVisible(true)
+  }
 
   const handleViewUser = async (user: I_UserInput) => {
-    setSelectedUser(user);
-    setIsViewMode(true);
-  
+    setSelectedUser(user)
+    setIsViewMode(true)
+
     try {
-      let profileData;
+      let profileData
       if (user.role === E_Role.CANDIDATE) {
         const { data } = await client.query({
           query: GET_CANDIDATE_PROFILE,
-          variables: { userId: (user as any)._id }, // Cast to any to access _id
-        });
-        profileData = data.getCandidateProfile;
+          variables: { userId: (user as any)._id },
+        })
+        profileData = data.getCandidateProfile
       } else if (user.role === E_Role.RECRUITER) {
         const { data } = await client.query({
           query: GET_COMPANY,
-          variables: { userId: (user as any)._id }, // Cast to any to access _id
-        });
-        profileData = data.getCompany;
+          variables: { userId: (user as any)._id },
+        })
+        profileData = data.getCompany
       }
-  
+
       if (profileData) {
-        setSelectedUser({ ...user, ...profileData });
+        setSelectedUser({ ...user, ...profileData })
       } else {
-        throw new Error('Không tìm thấy thông tin chi tiết của người dùng');
+        throw new Error('Không tìm thấy thông tin chi tiết của người dùng')
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        notification.error({
-          message: 'Lỗi khi lấy thông tin người dùng',
-          description: error.message || 'Không thể lấy dữ liệu người dùng',
-        });
+        // notification.error({
+        //   message: 'Lỗi khi lấy thông tin người dùng',
+        //   description: error.message || 'Không thể lấy dữ liệu người dùng',
+        // })
       }
     }
-  };
-  
+  }
+
   const columns = [
     {
       title: 'Tên',
@@ -262,14 +289,18 @@ const ManagedUsers = () => {
             />
           </Tooltip>
         </div>
-      )
+      ),
     },
-  ];
+  ]
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-2xl font-bold text-gray-700 mb-6 text-center">Quản lý người dùng</h1>
-      <Button type="primary" onClick={() => openModal()}>Thêm người dùng</Button>
+      <h1 className="text-2xl font-bold text-gray-700 mb-6 text-center">
+        Quản lý người dùng
+      </h1>
+      <Button type="primary" onClick={() => openModal()}>
+        Thêm người dùng
+      </Button>
       <Table dataSource={users} columns={columns} rowKey="_id" />
 
       <Modal
@@ -280,13 +311,25 @@ const ManagedUsers = () => {
       >
         <Form layout="vertical">
           <Form.Item label="Họ và tên">
-            <Input name="fullName" value={userData.fullName} onChange={handleInputChange} />
+            <Input
+              name="fullName"
+              value={userData.fullName}
+              onChange={handleInputChange}
+            />
           </Form.Item>
           <Form.Item label="Email">
-            <Input name="email" value={userData.email} onChange={handleInputChange} />
+            <Input
+              name="email"
+              value={userData.email}
+              onChange={handleInputChange}
+            />
           </Form.Item>
           <Form.Item label="Mật khẩu">
-            <Input.Password name="password" value={userData.password} onChange={handleInputChange} />
+            <Input.Password
+              name="password"
+              value={userData.password}
+              onChange={handleInputChange}
+            />
           </Form.Item>
           <Form.Item label="Vai trò">
             <Select value={userData.role} onChange={handleRoleChange}>
@@ -313,18 +356,23 @@ const ManagedUsers = () => {
           <p>Vai trò: {selectedUser.role || 'Không có thông tin'}</p>
           {selectedUser.role === E_Role.CANDIDATE && (
             <>
-              <p>ID Hồ sơ ứng viên: {selectedUser.candidateId || 'Không có thông tin'}</p>
+              <p>
+                ID Hồ sơ ứng viên:{' '}
+                {selectedUser.candidateId || 'Không có thông tin'}
+              </p>
             </>
           )}
           {selectedUser.role === E_Role.RECRUITER && (
             <>
-              <p>ID Công ty: {selectedUser.companyId || 'Không có thông tin'}</p>
+              <p>
+                ID Công ty: {selectedUser.companyId || 'Không có thông tin'}
+              </p>
             </>
           )}
         </Modal>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ManagedUsers;
+export default ManagedUsers
