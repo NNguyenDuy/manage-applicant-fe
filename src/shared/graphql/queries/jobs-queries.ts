@@ -180,6 +180,48 @@ export const GET_JOB_WITH_FILTERS = gql`
     }
   }
 `;
+export const GET_MAINTAIN_JOBS_BY_COMPANY = gql`
+  query GetMaintainJobsByCompany($companyId: ID!) {
+    getMaintainJobsByCompany(companyId: $companyId) {
+      id
+      title
+      description
+      salary
+      experience
+      deadline
+      createdAt
+      updatedAt
+      headcount
+      idDel
+      company {
+        id
+        name
+        description
+        size
+        field
+        locationId
+        idDel
+      }
+      jobType {
+        _id
+        type
+        idDel
+      }
+      category {
+        _id
+        name
+        idDel
+      }
+      location {
+        _id
+        address
+        city
+        country
+        idDel
+      }
+    }
+  }
+`;
 
 export const UPDATE_ISDEL = gql`
   mutation UpdateIsDel($jobId: ID!, $isDel: Boolean) {
