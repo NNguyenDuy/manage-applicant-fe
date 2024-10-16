@@ -1,92 +1,98 @@
-import React, { useState } from 'react'
-import { useAuth } from '#/shared/hook/use-auth'
-import { I_Job, I_CandidateProfile } from '#/shared/typescript/common'
-import { useQuery } from '@apollo/client'
-import { GET_JOBS_BY_COMPANY_ID } from '#/shared/graphql/queries/jobs-queries'
+'use client';
+import React, { useState } from 'react';
+import { useAuth } from '#/shared/hook/use-auth';
+import { useQuery } from '@apollo/client';
+import { GET_MAINTAIN_JOBS_BY_COMPANY } from '#/shared/graphql/queries/jobs-queries';
+import UpdateJob from './update';
+import CreateJob from './create'; // Import component CreateJob
 
-export const ListJob = () => {
-  const { user } = useAuth()
+export const ListJob: React.FC = () => {
+  const { user } = useAuth();
+  const { data, loading, error } = useQuery(GET_MAINTAIN_JOBS_BY_COMPANY, {
+    variables: { companyId: user?.companyId },
+    skip: !user?.companyId,
+  });
 
-  const { data, loading, error } = useQuery(GET_JOBS_BY_COMPANY_ID, {
-    variables: { companyId: user?.company?._id },
-    skip: !user?.company?._id,
-  })
-
-  const [selectedJobId, setSelectedJobId] = useState<string | null>(null)
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
+  const [isCreateJobOpen, setIsCreateJobOpen] = useState(false); // State để quản lý việc hiển thị form tạo công việc
 
   const handleJobClick = (jobId: string) => {
-    setSelectedJobId(jobId === selectedJobId ? null : jobId)
-  }
+    setSelectedJobId(jobId === selectedJobId ? null : jobId);
+  };
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error: {error.message}</p>
+  const handleCloseUpdate = () => {
+    setSelectedJobId(null);
+  };
+
+  const handleCreateJobOpen = () => {
+    setIsCreateJobOpen(true);
+  };
+
+  const handleCreateJobClose = () => {
+    setIsCreateJobOpen(false);
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Danh sách công việc</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Danh sách công việc</h1>
+
+      {/* Nút tạo mới công việc */}
+      <button onClick={handleCreateJobOpen} className="bg-blue-500 text-white px-4 py-2 rounded mb-6">
+        Tạo mới
+      </button>
+
+      {/* Danh sách công việc */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data?.getJobsByCompanyId.map((job: I_Job) => (
+        {data?.getMaintainJobsByCompany.map((job: any) => (
           <div
-            key={job._id}
-            className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer"
-            onClick={() => handleJobClick(job._id)}
+            key={job.id}
+            className={`bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer ${selectedJobId === job.id ? 'ring-2 ring-green-500' : ''}`}
+            onClick={() => handleJobClick(job.id)}
           >
-            <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
-            <p className="text-gray-600 mb-2">{job.description}</p>
-
-            {/* Hiển thị danh sách ứng viên khi click vào công việc */}
-            {selectedJobId === job._id && (
-              <div className="mt-4">
-                <h3 className="text-lg font-semibold">Danh sách ứng viên:</h3>
-                {job.candidates && job.candidates.length ? (
-                  <ul className="list-disc list-inside mt-2 space-y-1">
-                    {job.candidates.map((candidate: I_CandidateProfile) => (
-                      <li key={candidate._id} className="text-blue-500">
-                        {/* Hiển thị thông tin ứng viên */}
-                        <p>
-                          <strong>Tên ứng viên:</strong> {candidate.userId}
-                        </p>
-
-                        {/* Kỹ năng của ứng viên */}
-                        <p>
-                          <strong>Kỹ năng:</strong>
-                        </p>
-                        <ul className="list-inside space-y-1">
-                          {candidate.resume?.skills?.map((skill, index) => (
-                            <li key={index} className="text-gray-700">
-                              - {skill.name} ({skill.experience} năm kinh
-                              nghiệm)
-                            </li>
-                          ))}
-                        </ul>
-
-                        {/* Liên kết CV */}
-                        <div className="mt-2">
-                          {candidate.resume?.cvLinks?.map((cvLink, index) => (
-                            <a
-                              key={index}
-                              href={cvLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-sm text-gray-600 hover:underline ml-2"
-                            >
-                              [Xem CV {index + 1}]
-                            </a>
-                          ))}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-500 mt-2">
-                    Chưa có ứng viên nào ứng tuyển.
-                  </p>
-                )}
-              </div>
-            )}
+            <h2 className="text-2xl font-semibold mb-2">{job.title}</h2>
+            <p className="text-gray-600 mb-4">{job.description}</p>
+            
+            <div className="text-gray-500">
+              <p><strong>Lương:</strong> {job.salary ? job.salary.toLocaleString('vi-VN') + ' VND' : 'Thỏa thuận'}</p>
+              <p><strong>Kinh nghiệm:</strong> {job.experience || 'Không yêu cầu'} năm</p>
+              <p><strong>Hạn nộp hồ sơ:</strong> {job.deadline ? new Date(job.deadline).toLocaleDateString() : 'Không rõ'}</p>
+              <p><strong>Loại công việc:</strong> {job.jobType?.type || 'Không rõ'}</p>
+              <p><strong>Địa điểm:</strong> {job.location?.city || 'Không rõ'}, {job.location?.country || 'Không rõ'}</p>
+              <p><strong>Danh mục:</strong> {job.category?.name || 'Không rõ'}</p>
+              <p><strong>Trạng thái:</strong> {job.idDel ? 'Đã ẩn' : 'Đang hiển thị'}</p>
+            </div>
           </div>
         ))}
       </div>
+
+      {/* Hiển thị modal cho form tạo mới công việc */}
+      {isCreateJobOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg p-6 border border-blue-500 max-h-[40rem] overflow-y-auto w-full md:w-2/3 lg:w-1/2"> {/* Tăng chiều cao lên gấp đôi và thêm viền */}
+            <CreateJob 
+              onClose={handleCreateJobClose} 
+              companyId={user?.companyId || ''} // Truyền companyId, đảm bảo không undefined
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Hiển thị modal cho form cập nhật công việc */}
+      {selectedJobId && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg p-6 border border-blue-500 max-h-[40rem] overflow-y-auto w-full md:w-2/3 lg:w-1/2"> {/* Tăng chiều cao lên gấp đôi và thêm viền */}
+            <UpdateJob 
+              job={data?.getMaintainJobsByCompany.find((job: any) => job.id === selectedJobId)} 
+              onClose={handleCloseUpdate} 
+            />
+          </div>
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
+
+export default ListJob;
