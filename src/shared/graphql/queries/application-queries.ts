@@ -32,3 +32,12 @@ export const GET_APPLICATION_BY_CANDIDATE = gql`
     }
   }
 `
+
+export const APPLY_JOB = gql`
+  mutation CreateApplication($application: ApplicationInput!) {
+    createApplication(application: $application) {
+      _id
+      jobId
+    }
+  }
+`

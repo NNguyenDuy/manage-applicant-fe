@@ -1,13 +1,13 @@
-import { Worker, Viewer } from '@react-pdf-viewer/core'
 import { useMutation } from '@apollo/client'
 import { Icons } from '#/icons'
 import { UPDATE_CANDIDATE_PROFILE } from '#/shared/graphql/queries'
 import { useAuth } from '#/shared/hook/use-auth'
 import { useState, useEffect } from 'react'
-import { Modal, Input, notification, Upload, Button } from 'antd'
+import { Modal, notification, Upload, Button } from 'antd'
 import { ListSkill } from './list-skill'
 import axios from 'axios'
 import { PDFViewerWrapper } from './PDFViewerWrapper'
+import type { RcFile } from 'antd/lib/upload/interface'
 
 export const ListCV: React.FC = () => {
   const { user, refetchUser } = useAuth()
@@ -24,8 +24,10 @@ export const ListCV: React.FC = () => {
 
   const fetchCvList = async () => {
     try {
-      const response = await axios.get(`/api/upload?email=${user?.email}`)
-      setCvList(response.data.cvUrls)
+      const response = await axios.get(
+        `http://localhost:5000/rest/cv-list?email=${user?.email}`
+      )
+      setCvList(response.data.cvFiles || [])
     } catch (error) {
       console.error('Lỗi khi lấy danh sách CV:', error)
       notification.error({
@@ -82,7 +84,7 @@ export const ListCV: React.FC = () => {
       cancelText: 'Hủy',
       onOk: async () => {
         try {
-          await axios.delete(`/api/upload?file=${cv}`)
+          await axios.delete(`http://localhost:5000/rest?file=${cv}`)
           await handleUpdateProfile(cvList.filter((item) => item !== cv))
         } catch (error) {
           console.error('Error deleting CV:', error)
@@ -95,7 +97,7 @@ export const ListCV: React.FC = () => {
     })
   }
 
-  const handleUploadCV = async (file: File) => {
+  const handleUploadCV = async (file: RcFile) => {
     if (file.type !== 'application/pdf') {
       notification.error({
         message: 'Upload thất bại',
@@ -104,20 +106,29 @@ export const ListCV: React.FC = () => {
       return false
     }
 
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('userEmail', user?.email as string)
-
+    setLoading(true)
     try {
-      const response = await axios.post('/api/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      const formData = new FormData()
+      formData.append('file', file)
+      const response = await axios.post(
+        `http://localhost:5000/rest/?userEmail=${encodeURIComponent(
+          user?.email || ''
+        )}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
 
       const newCvUrl = response.data.cvUrl
-
       await handleUpdateProfile([...cvList, newCvUrl])
+
+      notification.success({
+        message: 'Upload thành công',
+        description: 'CV đã được tải lên thành công!',
+      })
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(
@@ -136,6 +147,8 @@ export const ListCV: React.FC = () => {
           description: 'Đã có lỗi không xác định xảy ra!',
         })
       }
+    } finally {
+      setLoading(false)
     }
 
     return false
