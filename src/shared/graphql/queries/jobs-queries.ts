@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const GET_ALL_JOBS = gql`
   query GetAllJobs($idDel: Boolean!) {
@@ -41,7 +41,7 @@ export const GET_ALL_JOBS = gql`
       }
     }
   }
-`
+`;
 
 export const GET_JOB_BY_ID = gql`
   query GetJobById($jobId: ID!) {
@@ -88,7 +88,7 @@ export const GET_JOB_BY_ID = gql`
       }
     }
   }
-`
+`;
 
 export const GET_JOBS_BY_COMPANY_ID = gql`
   query GetJobsByCompanyId($companyId: ID!) {
@@ -123,74 +123,107 @@ export const GET_JOBS_BY_COMPANY_ID = gql`
       }
     }
   }
-`
+`;
 export const GET_JOB_WITH_FILTERS = gql`
   query GetJobsWithFilters(
     $jtitle: String
     $jlocation: String
     $jCategory: String
+    $idDel: Boolean
   ) {
     getJobsWithFilters(
       Jtitle: $jtitle
       Jlocation: $jlocation
       JCategory: $jCategory
+      idDel: $idDel
     ) {
-      _id
+      id
       title
       description
+      salary
+      experience
+      deadline
+      createdAt
+      updatedAt
+      headcount
+      companyId
+      jobTypeId
+      categoryId
+      locationId
+      idDel
+      company {
+        id
+        name
+        description
+        size
+        field
+        locationId
+        idDel
+      }
       jobType {
         _id
         type
+        idDel
+      }
+      category {
+        _id
+        name
+        idDel
       }
       location {
         _id
         address
         city
         country
-      }
-      company {
-        _id
-        name
-        ownerId
-        locationId
-        jobs {
-          _id
-          title
-          description
-          companyId
-        }
-      }
-      categoryIds {
-        _id
-        name
+        idDel
       }
     }
   }
-`
+`;
 
-export const GET_JOBS_WITH_FILTERS = gql`
-  query GetJobsWithFilters(
-    $name: String!
-    $location: String!
-    $jobType: String!
-  ) {
-    getJobsWithFilters(name: $name, location: $location, jobType: $jobType) {
-      _id
+export const UPDATE_ISDEL = gql`
+  mutation UpdateIsDel($jobId: ID!, $isDel: Boolean) {
+    updateIsDel(jobId: $jobId, isDel: $isDel) {
+      id
       title
       description
-      location {
-        _id
-        city
-        country
+      salary
+      experience
+      deadline
+      createdAt
+      updatedAt
+      headcount
+      companyId
+      jobTypeId
+      categoryId
+      locationId
+      idDel
+      company {
+        id
+        name
+        description
+        size
+        field
+        locationId
+        idDel
       }
       jobType {
         _id
         type
+        idDel
       }
-      company {
+      category {
         _id
         name
+        idDel
+      }
+      location {
+        _id
+        address
+        city
+        country
+        idDel
       }
     }
   }
-`
+`;
