@@ -22,7 +22,7 @@ const ApplicationUser = () => {
   const [pageSize, setPageSize] = useState(10)
 
   const handlePdfClick = (cv: string) => {
-    setSelectedPdf(cv)
+    setSelectedPdf('http://localhost:5000' + cv)
     setIsModalOpen(true)
   }
 
