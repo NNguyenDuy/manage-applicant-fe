@@ -115,3 +115,11 @@ export interface I_PathItem {
   icon: ReactNode
   path: string
 }
+
+export enum E_EvaluationAI {
+  NONE = 'none',
+  PRIORITY = 'priority',
+  POTENTIAL = 'potential',
+  SUITABLE = 'suitable',
+  NOT_SUITABLE = 'not_suitable',
+}

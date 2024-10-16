@@ -23,22 +23,15 @@ export const PATHS: {
     },
     {
       key: '3',
+      label: 'Quản lý ứng tuyển',
+      icon: <Icons.Upload />,
+      path: `${ROOTS.RECRUITER}/job-recruiter`,
+    },
+    {
+      key: '4',
       label: 'Cài đặt',
       icon: <Icons.Setting />,
       path: `${ROOTS.RECRUITER}/settings`,
     },
-    {
-      key: '4',
-      label: 'Danh sách công việc',
-      icon: <Icons.Setting />,
-      path: `${ROOTS.RECRUITER}/find-jobs`,
-    },
-    {
-      key: '5',
-      label: 'Quản lý ứng tuyển',
-      icon: <Icons.Setting />,
-      path: `${ROOTS.RECRUITER}/job-recruiter`,
-    },
-    
   ],
 }
