@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const GET_ALL_JOBS = gql`
   query GetAllJobs($idDel: Boolean!) {
@@ -41,7 +41,7 @@ export const GET_ALL_JOBS = gql`
       }
     }
   }
-`;
+`
 
 export const GET_JOB_BY_ID = gql`
   query GetJobById($jobId: ID!) {
@@ -88,7 +88,7 @@ export const GET_JOB_BY_ID = gql`
       }
     }
   }
-`;
+`
 
 export const GET_JOBS_BY_COMPANY_ID = gql`
   query GetJobsByCompanyId($companyId: ID!) {
@@ -123,7 +123,7 @@ export const GET_JOBS_BY_COMPANY_ID = gql`
       }
     }
   }
-`;
+`
 export const GET_JOB_WITH_FILTERS = gql`
   query GetJobsWithFilters(
     $jtitle: String
@@ -179,7 +179,7 @@ export const GET_JOB_WITH_FILTERS = gql`
       }
     }
   }
-`;
+`
 export const GET_MAINTAIN_JOBS_BY_COMPANY = gql`
   query GetMaintainJobsByCompany($companyId: ID!) {
     getMaintainJobsByCompany(companyId: $companyId) {
@@ -221,51 +221,4 @@ export const GET_MAINTAIN_JOBS_BY_COMPANY = gql`
       }
     }
   }
-`;
-
-export const UPDATE_ISDEL = gql`
-  mutation UpdateIsDel($jobId: ID!, $isDel: Boolean) {
-    updateIsDel(jobId: $jobId, isDel: $isDel) {
-      id
-      title
-      description
-      salary
-      experience
-      deadline
-      createdAt
-      updatedAt
-      headcount
-      companyId
-      jobTypeId
-      categoryId
-      locationId
-      idDel
-      company {
-        id
-        name
-        description
-        size
-        field
-        locationId
-        idDel
-      }
-      jobType {
-        _id
-        type
-        idDel
-      }
-      category {
-        _id
-        name
-        idDel
-      }
-      location {
-        _id
-        address
-        city
-        country
-        idDel
-      }
-    }
-  }
-`;
+`
