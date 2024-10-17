@@ -129,72 +129,57 @@ export const GET_JOB_WITH_FILTERS = gql`
     $jtitle: String
     $jlocation: String
     $jCategory: String
+    $idDel: Boolean
   ) {
     getJobsWithFilters(
       Jtitle: $jtitle
       Jlocation: $jlocation
       JCategory: $jCategory
+      idDel: $idDel
     ) {
-      _id
+      id
       title
       description
+      salary
+      experience
+      deadline
+      createdAt
+      updatedAt
+      headcount
+      companyId
+      jobTypeId
+      categoryId
+      locationId
+      idDel
+      company {
+        id
+        name
+        description
+        size
+        field
+        locationId
+        idDel
+      }
       jobType {
         _id
         type
+        idDel
+      }
+      category {
+        _id
+        name
+        idDel
       }
       location {
         _id
         address
         city
         country
-      }
-      company {
-        _id
-        name
-        ownerId
-        locationId
-        jobs {
-          _id
-          title
-          description
-          companyId
-        }
-      }
-      categoryIds {
-        _id
-        name
+        idDel
       }
     }
   }
 `
-
-export const GET_JOBS_WITH_FILTERS = gql`
-  query GetJobsWithFilters(
-    $name: String!
-    $location: String!
-    $jobType: String!
-  ) {
-    getJobsWithFilters(name: $name, location: $location, jobType: $jobType) {
-      _id
-      title
-      description
-      location {
-        _id
-        city
-        country
-      }
-      jobType {
-        _id
-        type
-      }
-      company {
-        _id
-        name
-      }
-    }
-  }
-`
-
 export const GET_MAINTAIN_JOBS_BY_COMPANY = gql`
   query GetMaintainJobsByCompany($companyId: ID!) {
     getMaintainJobsByCompany(companyId: $companyId) {

@@ -1,54 +1,58 @@
-import React, { useState, FormEvent } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { UPDATE_JOB } from '#/shared/graphql/mutations/job-mutations'; // Import mutation từ GraphQL
-import { GET_ALL_JOBCATEGORY } from '#/shared/graphql/queries/category-queries'; // Import query để lấy danh mục công việc
-import { GET_ALL_JOBTYPES } from '#/shared/graphql/queries/jobtypes-queries'; // Import query để lấy loại công việc
-import { GET_LOCATIONS } from "#/shared/graphql/queries/location-queries"; // Import query lấy danh sách địa điểm
+import React, { useState, FormEvent } from 'react'
+import { useMutation, useQuery } from '@apollo/client'
+import { UPDATE_JOB } from '#/shared/graphql/mutations/job-mutations' // Import mutation từ GraphQL
+import { GET_ALL_JOBCATEGORY } from '#/shared/graphql/queries/category-queries' // Import query để lấy danh mục công việc
+import { GET_ALL_JOBTYPES } from '#/shared/graphql/queries/jobtypes-queries' // Import query để lấy loại công việc
+import { GET_LOCATIONS } from '#/shared/graphql/queries/location-queries' // Import query lấy danh sách địa điểm
 
 interface I_Job {
-  id: string;
-  title: string;
-  description: string;
-  salary: number;
-  experience: number;
-  deadline: string;
-  jobType: string;
-  location: string;
-  category: string;
-  headcount: number;
-  companyId: string;
+  id: string
+  title: string
+  description: string
+  salary: number
+  experience: number
+  deadline: string
+  jobType: string
+  location: string
+  category: string
+  headcount: number
+  companyId: string
 }
 
 interface UpdateJobProps {
-  job: I_Job;
-  onClose: () => void;
+  job: I_Job
+  onClose: () => void
 }
 
 const UpdateJob: React.FC<UpdateJobProps> = ({ job, onClose }) => {
   // Dùng useState để lưu dữ liệu form
   const [formData, setFormData] = useState({
     ...job,
-    deadline: job.deadline ? new Date(job.deadline).toISOString().split('T')[0] : "", // Chuyển đổi deadline thành định dạng yyyy-MM-dd
-  });
+    deadline: job.deadline
+      ? new Date(job.deadline).toISOString().split('T')[0]
+      : '', // Chuyển đổi deadline thành định dạng yyyy-MM-dd
+  })
 
   const {
     data: vietnamProvinces,
     loading: locationsLoading,
     error: locationsError,
-  } = useQuery(GET_LOCATIONS);
+  } = useQuery(GET_LOCATIONS)
 
   // Lấy danh sách các category từ API
-  const { data: categoriesData, loading: categoriesLoading } = useQuery(GET_ALL_JOBCATEGORY);
-  
+  const { data: categoriesData, loading: categoriesLoading } =
+    useQuery(GET_ALL_JOBCATEGORY)
+
   // Lấy danh sách các jobType từ API
-  const { data: jobTypesData, loading: jobTypesLoading } = useQuery(GET_ALL_JOBTYPES);
-  
+  const { data: jobTypesData, loading: jobTypesLoading } =
+    useQuery(GET_ALL_JOBTYPES)
+
   // Mutation để cập nhật công việc
-  const [updateJob, { loading, error }] = useMutation(UPDATE_JOB);
+  const [updateJob, { loading, error }] = useMutation(UPDATE_JOB)
 
   // Hàm xử lý submit form
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
+    event.preventDefault()
 
     try {
       const { data } = await updateJob({
@@ -57,34 +61,37 @@ const UpdateJob: React.FC<UpdateJobProps> = ({ job, onClose }) => {
           jobData: {
             title: formData.title || null,
             salary: formData.salary || null,
-            locationId: formData.location || null, // Đảm bảo lấy location từ formData
-            jobTypeId: formData.jobType || null,
             headcount: formData.headcount || null,
             experience: formData.experience || null,
             description: formData.description || null,
             deadline: formData.deadline || null,
-            companyId: formData.companyId || null,
-            categoryId: formData.category || null,
           },
         },
-      });
+      })
 
-      console.log('Job updated successfully:', data);
-      onClose(); // Đóng form sau khi cập nhật thành công
+      console.log('Job updated successfully:', data)
+      onClose()
     } catch (err) {
-      alert('Cập nhật thất bại: ' + err);
-      console.error('Cập nhật thất bại:', err);
+      alert('Cập nhật thất bại: ' + err)
+      console.error('Cập nhật thất bại:', err)
     }
-  };
+  }
 
   // Hàm xử lý thay đổi dữ liệu trong form
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target
     setFormData({
       ...formData,
-      [name]: name === 'salary' || name === 'experience' || name === 'headcount' ? parseFloat(value) : value, // Xử lý lương, kinh nghiệm và headcount thành số
-    });
-  };
+      [name]:
+        name === 'salary' || name === 'experience' || name === 'headcount'
+          ? parseFloat(value)
+          : value,
+    })
+  }
 
   return (
     <div className="bg-gray-100 p-4 rounded shadow-md">
@@ -159,11 +166,13 @@ const UpdateJob: React.FC<UpdateJobProps> = ({ job, onClose }) => {
             className="w-full p-2 border rounded"
             disabled={jobTypesLoading} // Disable nếu đang load danh sách loại công việc
           >
-            {jobTypesData?.getAllJobTypes?.map((jobType: { _id: string; type: string }) => (
-              <option key={jobType._id} value={jobType._id}>
-                {jobType.type}
-              </option>
-            ))}
+            {jobTypesData?.getAllJobTypes?.map(
+              (jobType: { _id: string; type: string }) => (
+                <option key={jobType._id} value={jobType._id}>
+                  {jobType.type}
+                </option>
+              )
+            )}
           </select>
         </div>
         {/* Địa điểm */}
@@ -219,16 +228,24 @@ const UpdateJob: React.FC<UpdateJobProps> = ({ job, onClose }) => {
 
         {/* Buttons */}
         <div className="flex justify-end">
-          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded mr-2" disabled={loading}>
+          <button
+            type="submit"
+            className="bg-green-500 text-white px-4 py-2 rounded mr-2"
+            disabled={loading}
+          >
             {loading ? 'Đang lưu...' : 'Cập nhật'}
           </button>
-          <button type="button" className="bg-red-500 text-white px-4 py-2 rounded" onClick={onClose}>
+          <button
+            type="button"
+            className="bg-red-500 text-white px-4 py-2 rounded"
+            onClick={onClose}
+          >
             Hủy bỏ
           </button>
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default UpdateJob;
+export default UpdateJob

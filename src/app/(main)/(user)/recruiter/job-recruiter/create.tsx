@@ -1,72 +1,72 @@
-import { gql } from '@apollo/client';
-import React, { useState, FormEvent } from "react";
-import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_JOB } from "#/shared/graphql/mutations/job-mutations"; // Import mutation để tạo công việc
-import { GET_ALL_JOBCATEGORY } from "#/shared/graphql/queries/category-queries"; // Import query lấy danh mục công việc
-import { GET_ALL_JOBTYPES } from "#/shared/graphql/queries/jobtypes-queries"; // Import query lấy loại công việc
-import { GET_LOCATIONS } from "#/shared/graphql/queries/location-queries"; // Import query lấy danh sách địa điểm
+import { gql } from '@apollo/client'
+import React, { useState, FormEvent } from 'react'
+import { useMutation, useQuery } from '@apollo/client'
+import { CREATE_JOB } from '#/shared/graphql/mutations/job-mutations'
+import { GET_ALL_JOBCATEGORY } from '#/shared/graphql/queries/category-queries'
+import { GET_ALL_JOBTYPES } from '#/shared/graphql/queries/jobtypes-queries'
+import { GET_LOCATIONS } from '#/shared/graphql/queries/location-queries'
 
 interface I_Job {
-  title: string;
-  description: string;
-  salary: number;
-  experience: number;
-  deadline: string;
-  jobType: string;
-  location: string;
-  category: string;
-  status: boolean;
-  headcount: number;
-  companyId: string;
-  isDel: boolean;
+  title: string
+  description: string
+  salary: number
+  experience: number
+  deadline: string
+  jobType: string
+  location: string
+  category: string
+  status: boolean
+  headcount: number
+  companyId: string
+  isDel: boolean
 }
 
 interface CreateJobProps {
-  onClose: () => void;
-  companyId: string;
+  onClose: () => void
+  companyId: string
 }
 
 const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
   const [formData, setFormData] = useState<I_Job>({
-    title: "",
-    description: "",
+    title: '',
+    description: '',
     salary: 0,
     experience: 0,
-    deadline: "",
-    jobType: "",
-    location: "",
-    category: "",
+    deadline: '',
+    jobType: '',
+    location: '',
+    category: '',
     status: true,
     headcount: 1, // Mặc định là 1
     companyId: companyId, // Gắn companyId vào formData
     isDel: false,
-  });
+  })
 
   // Lấy danh sách địa điểm từ API
   const {
     data: vietnamProvinces,
     loading: locationsLoading,
     error: locationsError,
-  } = useQuery(GET_LOCATIONS);
+  } = useQuery(GET_LOCATIONS)
 
-  const [createJob, { loading, error }] = useMutation(CREATE_JOB);
+  const [createJob, { loading, error }] = useMutation(CREATE_JOB)
 
   // Lấy danh sách các category từ API
   const {
     data: categoriesData,
     loading: categoriesLoading,
     error: categoriesError,
-  } = useQuery(GET_ALL_JOBCATEGORY);
+  } = useQuery(GET_ALL_JOBCATEGORY)
 
   // Lấy danh sách các jobType từ API
   const {
     data: jobTypesData,
     loading: jobTypesLoading,
     error: jobTypesError,
-  } = useQuery(GET_ALL_JOBTYPES);
+  } = useQuery(GET_ALL_JOBTYPES)
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
+    event.preventDefault()
 
     try {
       const { data } = await createJob({
@@ -84,29 +84,29 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             companyId: formData.companyId, // Truyền companyId
           },
         },
-      });
+      })
 
-      onClose(); // Đóng form sau khi tạo công việc thành công
+      onClose()
     } catch (err) {
-      alert("Tạo mới thất bại: " + err);
-      console.error("Tạo mới thất bại:", err);
+      alert('Tạo mới thất bại: ' + err)
+      console.error('Tạo mới thất bại:', err)
     }
-  };
+  }
 
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData({
       ...formData,
       [name]:
-        name === "salary" || name === "experience" || name === "headcount"
+        name === 'salary' || name === 'experience' || name === 'headcount'
           ? parseFloat(value)
           : value, // Chuyển lương, kinh nghiệm và headcount sang số
-    });
-  };
+    })
+  }
 
   return (
     <div className="bg-gray-100 p-4 rounded shadow-md">
@@ -259,7 +259,7 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             className="bg-green-500 text-white px-4 py-2 rounded mr-2"
             disabled={loading}
           >
-            {loading ? "Đang lưu..." : "Tạo công việc"}
+            {loading ? 'Đang lưu...' : 'Tạo công việc'}
           </button>
           <button
             type="button"
@@ -271,7 +271,7 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default CreateJob;
+export default CreateJob

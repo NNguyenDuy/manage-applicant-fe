@@ -99,6 +99,7 @@ export interface I_Application {
   status?: E_ApplicationStatus
   selectedCvLink?: string
   appliedAt?: string
+  evaluationAI?: string
   isDel?: boolean
   job?: I_Job
 }
@@ -113,4 +114,12 @@ export interface I_PathItem {
   label: string
   icon: ReactNode
   path: string
+}
+
+export enum E_EvaluationAI {
+  NONE = 'none',
+  PRIORITY = 'priority',
+  POTENTIAL = 'potential',
+  SUITABLE = 'suitable',
+  NOT_SUITABLE = 'not_suitable',
 }

@@ -48,3 +48,10 @@ export const UPDATE_USER = gql`
     }
   }
 `
+export const UPDATE_COMPANY = gql`
+  mutation UpdateCompany($companyId: ID!, $companyData: CompanyInput!) {
+    updateCompany(companyId: $companyId, companyData: $companyData) {
+      id
+    }
+  }
+`

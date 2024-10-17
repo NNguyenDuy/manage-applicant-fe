@@ -23,27 +23,21 @@ export const PATHS: {
     },
     {
       key: '3',
-      label: 'Cài đặt',
-      icon: <Icons.Setting />,
-      path: `${ROOTS.RECRUITER}/settings`,
+      label: 'Quản lý ứng tuyển',
+      icon: <Icons.Upload />,
+      path: `${ROOTS.RECRUITER}/job-recruiter`,
     },
     {
       key: '4',
-      label: 'Tìm kiếm công việc',
-      icon: <Icons.Setting />,
-      path: `${ROOTS.RECRUITER}/find-jobs`,
-    },
-    {
-      key: '5',
-      label: 'Quản lý ứng tuyển',
-      icon: <Icons.Setting />,
-      path: `${ROOTS.RECRUITER}/job-recruiter`,
-    },
-    {
-      key: '6',
       label: 'Danh sách bài đăng tuyển dụng',
       icon: <Icons.Dashboard />,
       path: `${ROOTS.RECRUITER}/job-recruiter`,
+    },
+    {
+      key: '5',
+      label: 'Cài đặt',
+      icon: <Icons.Setting />,
+      path: `${ROOTS.RECRUITER}/settings`,
     },
   ],
 }
