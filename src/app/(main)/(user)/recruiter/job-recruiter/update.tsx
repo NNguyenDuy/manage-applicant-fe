@@ -3,6 +3,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_JOB } from '#/shared/graphql/mutations/job-mutations'; // Import mutation từ GraphQL
 import { GET_ALL_JOBCATEGORY } from '#/shared/graphql/queries/category-queries'; // Import query để lấy danh mục công việc
 import { GET_ALL_JOBTYPES } from '#/shared/graphql/queries/jobtypes-queries'; // Import query để lấy loại công việc
+import { GET_LOCATIONS } from "#/shared/graphql/queries/location-queries"; // Import query lấy danh sách địa điểm
 
 interface I_Job {
   id: string;
@@ -30,17 +31,11 @@ const UpdateJob: React.FC<UpdateJobProps> = ({ job, onClose }) => {
     deadline: job.deadline ? new Date(job.deadline).toISOString().split('T')[0] : "", // Chuyển đổi deadline thành định dạng yyyy-MM-dd
   });
 
-  const vietnamProvinces = [
-    {
-      _id: "670eb287fc608d8e444a0ffb",
-      address: "123 Đường ABC",
-      city: "Hồ Chí Minh",
-      country: "Việt Nam",
-      idDel: false,
-      __v: 0,
-    },
-    // Thêm các địa điểm khác vào đây nếu cần...
-  ]; 
+  const {
+    data: vietnamProvinces,
+    loading: locationsLoading,
+    error: locationsError,
+  } = useQuery(GET_LOCATIONS);
 
   // Lấy danh sách các category từ API
   const { data: categoriesData, loading: categoriesLoading } = useQuery(GET_ALL_JOBCATEGORY);
@@ -175,17 +170,20 @@ const UpdateJob: React.FC<UpdateJobProps> = ({ job, onClose }) => {
         <div className="mb-4">
           <label className="block text-gray-700">Địa điểm</label>
           <select
-            name="location" // Tên phải khớp với key trong formData
-            value={formData.location} // Lấy value từ formData
-            onChange={handleInputChange} // Gọi handleInputChange khi thay đổi
+            name="location"
+            value={formData.location}
+            onChange={handleInputChange}
             className="w-full p-2 border rounded"
+            disabled={locationsLoading}
           >
             <option value="">Chọn địa điểm</option>
-            {vietnamProvinces.map((province) => (
-              <option key={province._id} value={province._id}>
-                {province.city}
-              </option>
-            ))}
+            {vietnamProvinces?.getAllLocations?.map(
+              (province: { _id: string; city: string }) => (
+                <option key={province._id} value={province._id}>
+                  {province.city}
+                </option>
+              )
+            )}
           </select>
         </div>
         {/* Danh mục */}

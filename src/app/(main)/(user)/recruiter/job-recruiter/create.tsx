@@ -1,8 +1,10 @@
+import { gql } from '@apollo/client';
 import React, { useState, FormEvent } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_JOB } from "#/shared/graphql/mutations/job-mutations"; // Import mutation từ GraphQL
-import { GET_ALL_JOBCATEGORY } from "#/shared/graphql/queries/category-queries"; // Import query để lấy danh mục công việc
-import { GET_ALL_JOBTYPES } from "#/shared/graphql/queries/jobtypes-queries"; // Import query để lấy loại công việc
+import { CREATE_JOB } from "#/shared/graphql/mutations/job-mutations"; // Import mutation để tạo công việc
+import { GET_ALL_JOBCATEGORY } from "#/shared/graphql/queries/category-queries"; // Import query lấy danh mục công việc
+import { GET_ALL_JOBTYPES } from "#/shared/graphql/queries/jobtypes-queries"; // Import query lấy loại công việc
+import { GET_LOCATIONS } from "#/shared/graphql/queries/location-queries"; // Import query lấy danh sách địa điểm
 
 interface I_Job {
   title: string;
@@ -40,16 +42,12 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
     isDel: false,
   });
 
-  // Danh sách location trả về từ API (bao gồm _id)
-  const vietnamProvinces = [
-    {
-      _id: "670eb287fc608d8e444a0ffb",
-      city: "Hồ Chí Minh",
-      address: "123 Đường ABC",
-      country: "Việt Nam",
-    },
-    // Thêm các địa điểm khác vào đây...
-  ];
+  // Lấy danh sách địa điểm từ API
+  const {
+    data: vietnamProvinces,
+    loading: locationsLoading,
+    error: locationsError,
+  } = useQuery(GET_LOCATIONS);
 
   const [createJob, { loading, error }] = useMutation(CREATE_JOB);
 
@@ -70,13 +68,6 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    console.log("Dữ liệu gửi lên:", {
-      jobData: {
-        ...formData,
-        deadline: new Date(formData.deadline).toISOString(), // Định dạng deadline thành ISO
-      },
-    });
-
     try {
       const { data } = await createJob({
         variables: {
@@ -88,14 +79,14 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             deadline: new Date(formData.deadline).toISOString(), // Định dạng lại deadline
             jobTypeId: formData.jobType,
             categoryId: formData.category,
-            locationId: formData.location, // Truyền locationId là ObjectId
+            locationId: formData.location, // Truyền locationId từ danh sách
             headcount: formData.headcount,
             companyId: formData.companyId, // Truyền companyId
           },
         },
       });
 
-      onClose(); // Đóng form sau khi lưu thay đổi
+      onClose(); // Đóng form sau khi tạo công việc thành công
     } catch (err) {
       alert("Tạo mới thất bại: " + err);
       console.error("Tạo mới thất bại:", err);
@@ -113,7 +104,7 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
       [name]:
         name === "salary" || name === "experience" || name === "headcount"
           ? parseFloat(value)
-          : value, // Xử lý lương, kinh nghiệm và headcount thành số
+          : value, // Chuyển lương, kinh nghiệm và headcount sang số
     });
   };
 
@@ -121,7 +112,6 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
     <div className="bg-gray-100 p-4 rounded shadow-md">
       <h2 className="text-xl font-bold mb-4">Tạo công việc mới</h2>
       {error && <p className="text-red-500">Error: {error.message}</p>}
-      {/* Form tạo công việc mới */}
       <form onSubmit={handleSubmit}>
         {/* Tiêu đề công việc */}
         <div className="mb-4">
@@ -132,9 +122,10 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             value={formData.title}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
-            placeholder="Nhập tiêu đề"
+            placeholder="Nhập tiêu đề công việc"
           />
         </div>
+
         {/* Mô tả công việc */}
         <div className="mb-4">
           <label className="block text-gray-700">Mô tả công việc</label>
@@ -143,9 +134,10 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             value={formData.description}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
-            placeholder="Nhập mô tả"
+            placeholder="Nhập mô tả công việc"
           />
         </div>
+
         {/* Lương */}
         <div className="mb-4">
           <label className="block text-gray-700">Lương</label>
@@ -155,9 +147,10 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             value={formData.salary}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
-            placeholder="Nhập lương"
+            placeholder="Nhập mức lương"
           />
         </div>
+
         {/* Kinh nghiệm */}
         <div className="mb-4">
           <label className="block text-gray-700">Kinh nghiệm (năm)</label>
@@ -170,6 +163,7 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             placeholder="Nhập số năm kinh nghiệm"
           />
         </div>
+
         {/* Hạn nộp hồ sơ */}
         <div className="mb-4">
           <label className="block text-gray-700">Hạn nộp hồ sơ</label>
@@ -181,7 +175,8 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             className="w-full p-2 border rounded"
           />
         </div>
-        {/* Headcount */}
+
+        {/* Số lượng tuyển */}
         <div className="mb-4">
           <label className="block text-gray-700">Số lượng tuyển</label>
           <input
@@ -193,6 +188,7 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             placeholder="Nhập số lượng tuyển"
           />
         </div>
+
         {/* Loại công việc */}
         <div className="mb-4">
           <label className="block text-gray-700">Loại công việc</label>
@@ -201,8 +197,9 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             value={formData.jobType}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
-            disabled={jobTypesLoading} // Disable nếu đang load danh sách loại công việc
+            disabled={jobTypesLoading}
           >
+            <option value="">Chọn loại công việc</option>
             {jobTypesData?.getAllJobTypes?.map(
               (jobType: { _id: string; type: string }) => (
                 <option key={jobType._id} value={jobType._id}>
@@ -212,6 +209,7 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             )}
           </select>
         </div>
+
         {/* Địa điểm */}
         <div className="mb-4">
           <label className="block text-gray-700">Địa điểm</label>
@@ -220,15 +218,19 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             value={formData.location}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
+            disabled={locationsLoading}
           >
             <option value="">Chọn địa điểm</option>
-            {vietnamProvinces.map((province: { _id: string; city: string }) => (
-              <option key={province._id} value={province._id}>
-                {province.city}
-              </option>
-            ))}
+            {vietnamProvinces?.getAllLocations?.map(
+              (province: { _id: string; city: string }) => (
+                <option key={province._id} value={province._id}>
+                  {province.city}
+                </option>
+              )
+            )}
           </select>
         </div>
+
         {/* Danh mục */}
         <div className="mb-4">
           <label className="block text-gray-700">Danh mục</label>
@@ -237,19 +239,18 @@ const CreateJob: React.FC<CreateJobProps> = ({ onClose, companyId }) => {
             value={formData.category}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
+            disabled={categoriesLoading}
           >
-            <option value="">Chọn danh mục</option>{" "}
-            {/* Đảm bảo không có giá trị rỗng */}
-            {categoriesData?.getAllJobCategories?.map((category: any) => (
-              <option key={category._id} value={category._id}>
-                {" "}
-                {/* Sử dụng _id thay vì tên */}
-                {category.name}
-              </option>
-            ))}
+            <option value="">Chọn danh mục</option>
+            {categoriesData?.getAllJobCategories?.map(
+              (category: { _id: string; name: string }) => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
+                </option>
+              )
+            )}
           </select>
         </div>
-        
 
         {/* Buttons */}
         <div className="flex justify-end">
