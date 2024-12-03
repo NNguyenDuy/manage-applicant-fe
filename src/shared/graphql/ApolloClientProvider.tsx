@@ -3,9 +3,9 @@ import { ApolloProvider } from '@apollo/client'
 import client from '#/shared/graphql/apollo-client'
 
 export default function ApolloClientProvider({
-  children,
+    children,
 }: {
-  children: React.ReactNode
+    children: React.ReactNode
 }) {
-  return <ApolloProvider client={client}>{children}</ApolloProvider>
+    return <ApolloProvider client={client}>{children}</ApolloProvider>
 }

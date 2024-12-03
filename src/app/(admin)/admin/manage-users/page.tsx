@@ -1,11 +1,7 @@
 'use client'
 
 const ManagedUsers = () => {
-  return <>
-    
-  
-  
-  </>
+  return <></>
 }
 
 export default ManagedUsers
