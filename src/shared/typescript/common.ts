@@ -29,7 +29,7 @@ export interface I_Company {
   size: number
   field: string
   locationId: string
-  idDel: boolean
+  isDel: boolean
   jobs?: I_Job[]
   location: I_Location
 }
@@ -82,7 +82,7 @@ export interface I_Location {
   address: string
   city: string
   country: string
-  idDel: boolean
+  isDel: boolean
 }
 
 export enum E_ApplicationStatus {

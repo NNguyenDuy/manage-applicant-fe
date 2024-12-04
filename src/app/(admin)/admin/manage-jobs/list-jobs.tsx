@@ -5,13 +5,13 @@ import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { GET_ALL_JOBS } from "#/shared/graphql/queries";
 
-const ManageListJobs = ({ searchParams }: { searchParams: { jtitle: string; Jlocation: string; jCategory: string; idDel: boolean } }) => {
+const ManageListJobs = ({ searchParams }: { searchParams: { jtitle: string; Jlocation: string; jCategory: string; isDel: boolean } }) => {
   const { data, loading, error } = useQuery(GET_ALL_JOBS, {
     variables: {
       jtitle: searchParams.jtitle || "",
       Jlocation: searchParams.Jlocation || "",
       jCategory: searchParams.jCategory || "",
-      idDel: searchParams.idDel,
+      isDel: searchParams.isDel,
     },
   });
 
@@ -43,8 +43,8 @@ const ManageListJobs = ({ searchParams }: { searchParams: { jtitle: string; Jloc
                 <p className="text-gray-500">Công ty: {job.company?.name}</p>
                 <p className="text-gray-500">Danh mục: {job.category?.name}</p>
                 <p className="text-gray-500">Loại hình: {job.jobType?.type}</p>
-                <p className={`text-sm ${job.idDel ? "text-red-600" : "text-green-600"}`}>
-                  {job.idDel ? "Đã hết hạn" : "Đang hiển thị"}
+                <p className={`text-sm ${job.isDel ? "text-red-600" : "text-green-600"}`}>
+                  {job.isDel ? "Đã hết hạn" : "Đang hiển thị"}
                 </p>
               </li>
             </Link>

@@ -9,7 +9,7 @@ export const GET_INFO_USER = gql`
       role
       candidateId
       companyId
-      idDel
+      isDel
       candidate {
         id
         resume {
@@ -19,7 +19,7 @@ export const GET_INFO_USER = gql`
             experience
           }
         }
-        idDel
+        isDel
       }
       company {
         id
@@ -28,13 +28,13 @@ export const GET_INFO_USER = gql`
         size
         field
         locationId
-        idDel
+        isDel
         location {
           _id
           address
           city
           country
-          idDel
+          isDel
         }
       }
     }
@@ -64,7 +64,7 @@ export const GET_ALL_USERS = gql`
       role
       candidateId
       companyId
-      idDel
+      isDel
     }
   }
 `

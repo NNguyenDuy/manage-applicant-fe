@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 export const GET_ALL_JOBS = gql`
-  query GetAllJobs($idDel: Boolean!) {
-    getAllJobs(idDel: $idDel) {
+  query GetAllJobs($isDel: Boolean!) {
+    getAllJobs(isDel: $isDel) {
       id
       title
       description
@@ -16,7 +16,7 @@ export const GET_ALL_JOBS = gql`
       jobTypeId
       categoryId
       locationId
-      idDel
+      isDel
       company {
         id
         name
@@ -59,7 +59,7 @@ export const GET_JOB_BY_ID = gql`
       jobTypeId
       categoryId
       locationId
-      idDel
+      isDel
       company {
         id
         name
@@ -67,24 +67,24 @@ export const GET_JOB_BY_ID = gql`
         size
         field
         locationId
-        idDel
+        isDel
       }
       jobType {
         _id
         type
-        idDel
+        isDel
       }
       category {
         _id
         name
-        idDel
+        isDel
       }
       location {
         _id
         address
         city
         country
-        idDel
+        isDel
       }
     }
   }
@@ -129,13 +129,13 @@ export const GET_JOB_WITH_FILTERS = gql`
     $jtitle: String
     $jlocation: String
     $jCategory: String
-    $idDel: Boolean
+    $isDel: Boolean
   ) {
     getJobsWithFilters(
       Jtitle: $jtitle
       Jlocation: $jlocation
       JCategory: $jCategory
-      idDel: $idDel
+      isDel: $isDel
     ) {
       id
       title
@@ -150,7 +150,7 @@ export const GET_JOB_WITH_FILTERS = gql`
       jobTypeId
       categoryId
       locationId
-      idDel
+      isDel
       company {
         id
         name
@@ -158,24 +158,24 @@ export const GET_JOB_WITH_FILTERS = gql`
         size
         field
         locationId
-        idDel
+        isDel
       }
       jobType {
         _id
         type
-        idDel
+        isDel
       }
       category {
         _id
         name
-        idDel
+        isDel
       }
       location {
         _id
         address
         city
         country
-        idDel
+        isDel
       }
     }
   }
@@ -192,7 +192,7 @@ export const GET_MAINTAIN_JOBS_BY_COMPANY = gql`
       createdAt
       updatedAt
       headcount
-      idDel
+      isDel
       company {
         id
         name
@@ -200,24 +200,24 @@ export const GET_MAINTAIN_JOBS_BY_COMPANY = gql`
         size
         field
         locationId
-        idDel
+        isDel
       }
       jobType {
         _id
         type
-        idDel
+        isDel
       }
       category {
         _id
         name
-        idDel
+        isDel
       }
       location {
         _id
         address
         city
         country
-        idDel
+        isDel
       }
     }
   }

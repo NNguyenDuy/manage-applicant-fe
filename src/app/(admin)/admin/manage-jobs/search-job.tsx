@@ -5,11 +5,11 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_JOBCATEGORY } from "#/shared/graphql/queries/category-queries";
 import { FaSearch, FaMapMarkerAlt, FaBriefcase } from "react-icons/fa";
 
-const ManageSearchJobs = ({ onSearch }: { onSearch: (jtitle: string, Jlocation: string, jCategory: string, idDel: boolean) => void }) => {
+const ManageSearchJobs = ({ onSearch }: { onSearch: (jtitle: string, Jlocation: string, jCategory: string, isDel: boolean) => void }) => {
     const [jtitle, setJtitle] = useState("");
     const [Jlocation, setJlocation] = useState("");
     const [jCategory, setJCategory] = useState("");
-    const [idDel, setIdDel] = useState(false); // State for idDel
+    const [isDel, setisDel] = useState(false); // State for isDel
     const [vietnamProvinces, setVietnamProvinces] = useState([]);
 
     const { data: jobCategoryData } = useQuery(GET_ALL_JOBCATEGORY);
@@ -29,7 +29,7 @@ const ManageSearchJobs = ({ onSearch }: { onSearch: (jtitle: string, Jlocation: 
     }, []);
 
     const handleSearch = () => {
-        onSearch(jtitle, Jlocation, jCategory, idDel);
+        onSearch(jtitle, Jlocation, jCategory, isDel);
     };
 
     return (
@@ -85,8 +85,8 @@ const ManageSearchJobs = ({ onSearch }: { onSearch: (jtitle: string, Jlocation: 
                 <div className="flex items-center ml-4">
                     <input
                         type="checkbox"
-                        checked={idDel}
-                        onChange={(e) => setIdDel(e.target.checked)}
+                        checked={isDel}
+                        onChange={(e) => setisDel(e.target.checked)}
                         className="mr-2"
                     />
                     <label>Hiển thị công việc đã ẩn</label>
