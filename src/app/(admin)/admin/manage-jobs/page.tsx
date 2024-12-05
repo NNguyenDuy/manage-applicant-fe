@@ -9,11 +9,11 @@ const ManageJobs = () => {
     jtitle: "",
     Jlocation: "",
     jCategory: "",
-    idDel: false,
+    isDel: false,
   });
 
-  const handleSearch = (jtitle: string, Jlocation: string, jCategory: string, idDel: boolean) => {
-    setSearchParams({ jtitle, Jlocation, jCategory, idDel });
+  const handleSearch = (jtitle: string, Jlocation: string, jCategory: string, isDel: boolean) => {
+    setSearchParams({ jtitle, Jlocation, jCategory, isDel });
   };
 
   return (

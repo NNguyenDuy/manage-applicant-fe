@@ -10,13 +10,13 @@ const ListJobs = ({ name, location, jCategory }: { name: string, location: strin
       jtitle: name || "",
       jlocation: location || "",
       jCategory: jCategory || "",
-      idDel: false,
+      isDel: false,
     },
     skip: !(name || location || jCategory),
   });
 
   const { data: allJobsData, loading: allJobsLoading, error: allJobsError } = useQuery(GET_ALL_JOBS, {
-    variables: { idDel: false },
+    variables: { isDel: false },
   });
 
   if (filteredLoading || allJobsLoading) return <p>Loading...</p>;

@@ -62,7 +62,7 @@ export const GET_APPLICATION_BY_ID = gql`
         createdAt
         updatedAt
         headcount
-        idDel
+        isDel
         company {
           id
           name
@@ -70,24 +70,24 @@ export const GET_APPLICATION_BY_ID = gql`
           size
           field
           locationId
-          idDel
+          isDel
         }
         jobType {
           _id
           type
-          idDel
+          isDel
         }
         category {
           _id
           name
-          idDel
+          isDel
         }
         location {
           _id
           address
           city
           country
-          idDel
+          isDel
         }
       }
     }

@@ -12,11 +12,13 @@ export interface I_CompanyInput {
 }
 
 export interface I_UserInput {
+  id?: string;
   email: string
   password: string
   fullName: string
   role: E_Role
   company?: I_CompanyInput
+  isDel?: boolean; 
 }
 
 export interface I_CandidateUserInput extends I_UserInput {

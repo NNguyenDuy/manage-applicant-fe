@@ -63,10 +63,48 @@ const ManagedUsers = () => {
     }
   }, [data])
 
+  const handleSave = async (userData: I_UserInput) => {
+    if (!userData.fullName || !userData.email || !userData.password) {
+      notification.error({ message: 'Vui lòng điền đầy đủ thông tin' });
+      return;
+    }
+  
+    if (!validateEmail(userData.email)) {
+      notification.error({ message: 'Email không hợp lệ' });
+      return;
+    }
+  
+    if (checkEmailExists(userData.email) && !isEditMode) {
+      notification.error({ message: 'Email đã tồn tại' });
+      return;
+    }
+  
+    try {
+      if (isEditMode) {
+        await updateUser({ variables: { id: currentUserId, ...userData } });
+        notification.success({ message: 'Cập nhật người dùng thành công' });
+      } else {
+        await createUser({ variables: { ...userData } });
+        notification.success({ message: 'Tạo người dùng thành công' });
+      }
+      setIsModalVisible(false);
+      refetch();
+    } catch (error: unknown) {
+      notification.error({
+        message: 'Đã có lỗi xảy ra',
+        description: error instanceof Error ? error.message : '',
+      });
+    }
+  };
+  
+  
+  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setUserData({ ...userData, [name]: value })
-  }
+    const { name, value } = e.target;
+    setUserData((prev) => ({ ...prev, [name]: value }));
+  };
+  
 
   const handleRoleChange = (value: E_Role) => {
     setUserData({ ...userData, role: value })
@@ -182,20 +220,28 @@ const ManagedUsers = () => {
         try {
           await deleteUser({
             variables: { id: userId },
-          })
-          notification.success({ message: 'Xóa người dùng thành công' })
-          refetch()
+          });
+          notification.success({ message: 'Người dùng đã được đánh dấu là xóa' });
+          refetch();
         } catch (error: unknown) {
-          if (error instanceof Error) {
-            notification.error({
-              message: 'Xóa người dùng thất bại',
-              description: error.message || 'Đã có lỗi xảy ra',
-            })
-          }
+          notification.error({
+            message: 'Không thể xóa người dùng',
+            description: error instanceof Error ? error.message : '',
+          });
         }
       },
-    })
-  }
+    });
+  };
+  
+  useEffect(() => {
+    if (data) {
+      const filteredUsers = data.getAllUsers.filter(
+        (user: I_UserInput) => !user.isDel && user.role !== E_Role.ADMIN
+      );
+      setUsers(filteredUsers);
+    }
+  }, [data]);
+  
 
   const openModal = (user?: I_UserInput) => {
     if (user) {
@@ -307,8 +353,9 @@ const ManagedUsers = () => {
         title={isEditMode ? 'Sửa người dùng' : 'Thêm người dùng'}
         open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
-        onOk={isEditMode ? handleUpdate : handleCreate}
+        onOk={() => handleSave(userData)} // Replace the direct calls
       >
+
         <Form layout="vertical">
           <Form.Item label="Họ và tên">
             <Input

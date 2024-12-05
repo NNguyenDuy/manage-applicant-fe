@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_JOB_BY_ID, UPDATE_ISDEL } from "#/shared/graphql/queries"; // Mutation UPDATE_ISDEL để cập nhật trạng thái idDel
+import { GET_JOB_BY_ID, UPDATE_ISDEL } from "#/shared/graphql/queries"; // Mutation UPDATE_ISDEL để cập nhật trạng thái isDel
 import React from "react";
 import Link from "next/link";
 
@@ -22,11 +22,11 @@ const ManageJobDescription = ({ params }: { params: { id: string } }) => {
       await updateIsDel({
         variables: {
           jobId: job.id,
-          isDel: !job.idDel, 
+          isDel: !job.isDel, 
         },
       });
       refetch();
-      alert(`Tin tuyển dụng đã được ${job.idDel ? "mở" : "ẩn"} thành công.`);
+      alert(`Tin tuyển dụng đã được ${job.isDel ? "mở" : "ẩn"} thành công.`);
     } catch (error) {
       console.error("Lỗi khi cập nhật trạng thái tin tuyển dụng:", error);
     }
@@ -61,16 +61,16 @@ const ManageJobDescription = ({ params }: { params: { id: string } }) => {
           <strong>{new Date(job?.deadline).toLocaleDateString()}</strong>
         </div>
         <div className="flex space-x-4">
-          {/* Hiển thị nút dựa trên trạng thái idDel */}
+          {/* Hiển thị nút dựa trên trạng thái isDel */}
           <button
             className={`py-2 px-6 rounded-full ${
-              job?.idDel
+              job?.isDel
                 ? "bg-green-600 text-white hover:bg-green-700" // Nút "Mở tin tuyển dụng" khi isDel = true
                 : "bg-red-600 text-white hover:bg-red-700" // Nút "Ẩn tin tuyển dụng" khi isDel = false
             }`}
             onClick={handleToggleJobStatus}
           >
-            {job?.idDel ? "Mở tin tuyển dụng" : "Ẩn tin tuyển dụng"}
+            {job?.isDel ? "Mở tin tuyển dụng" : "Ẩn tin tuyển dụng"}
           </button>
         </div>
       </div>

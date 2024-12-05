@@ -108,6 +108,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         description:
           'Đã xảy ra lỗi trong quá trình đăng nhập. Vui lòng thử lại.',
       })
+      console.log(error)
       return null
     }
   }

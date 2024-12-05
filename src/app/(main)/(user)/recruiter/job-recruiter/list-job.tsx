@@ -97,7 +97,7 @@ export const ListJob: React.FC = () => {
               </p>
               <p>
                 <strong>Trạng thái:</strong>{' '}
-                {job?.idDel ? 'Đã ẩn' : 'Đang hiển thị'}
+                {job?.isDel ? 'Đã ẩn' : 'Đang hiển thị'}
               </p>
             </div>
           </div>
