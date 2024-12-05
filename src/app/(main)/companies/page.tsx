@@ -3,10 +3,9 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_COMPANIES } from '#/shared/graphql/queries/company-queries';
-import CompanyList from './list_companies';
+import CompanyList from './list-companies';
 
 const Company = () => {
-  // Giả định filters có sẵn, bạn có thể thay bằng Context hoặc Prop nếu cần
   const [filters] = useState({
     Jtitle: '',
     Jlocation: '',
