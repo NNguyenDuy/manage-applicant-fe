@@ -73,8 +73,10 @@ export const ListJob: React.FC = () => {
                         >
                             <h2 className="text-2xl font-semibold mb-2">{job.title}</h2>
                         </Link>
-                        <p className="text-gray-600 mb-4">{job.description}</p>
-
+                        <div className="mt-4"
+                            dangerouslySetInnerHTML={{ __html: job.description }}
+                        >
+                        </div>
                         <div className="text-gray-500">
                             <p>
                                 <strong>Lương:</strong>{' '}

@@ -7,6 +7,8 @@ import { UPDATE_APPLICATION_STATUS } from '#/shared/graphql/mutations/applicatio
 import { Modal, Select } from 'antd'
 import { E_EvaluationAI } from '#/shared/typescript'
 import { PDFViewerWrapper } from '#/app/(main)/(user)/candidate/cv-user/PDFViewerWrapper'
+import { toast } from 'react-toastify'
+import { sendNotificationEmail } from '#/shared/utils/emailService';
 
 const ListApplicated = ({ params }: { params: { id: string } }) => {
     const [selectedEvaluationAI, setSelectedEvaluationAI] =
@@ -32,29 +34,39 @@ const ListApplicated = ({ params }: { params: { id: string } }) => {
     const [updateApplicationStatus] = useMutation(UPDATE_APPLICATION_STATUS)
 
     const handleStatusUpdate = async (applicationId: string, newStatus: string) => {
-        try {
-            // Cập nhật trạng thái trong backend
-            const result = await updateApplicationStatus({
-                variables: {
-                    updateApplicationStatusId: applicationId,
-                    newStatus: newStatus,
-                },
-            });
-    
-            // Kiểm tra kết quả trả về từ backend
-            if (result?.data?.updateApplicationStatus?.success) {
-                alert('Cập nhật trạng thái và gửi email thành công!'); // Hiển thị thông báo thành công
-            } else {
-                alert('Cập nhật trạng thái thành công, nhưng có lỗi khi gửi email: ' + result?.data?.updateApplicationStatus?.message); // Hiển thị lỗi khi gửi email
-            }
-    
-            refetch(); // Lấy lại dữ liệu để cập nhật UI
-        } catch (err) {
-            console.error('Lỗi cập nhật trạng thái:', err);
-            alert('Có lỗi xảy ra khi cập nhật trạng thái.');
+        const application = filteredApplications.find((app: any) => app._id === applicationId);
+      
+        if (!application) {
+          toast.error('Không tìm thấy ứng viên để cập nhật trạng thái.');
+          return;
         }
-    };
-    
+      
+        try {
+          const result = await updateApplicationStatus({
+            variables: {
+              updateApplicationStatusId: applicationId,
+              newStatus: newStatus,
+            },
+          });
+      
+          if (result?.data?.updateApplicationStatus?.success) {
+            const { email, fullName } = application.candidate;
+            await sendNotificationEmail(email, fullName, newStatus);
+      
+            toast.success('Cập nhật trạng thái và gửi email thành công.');
+            refetch(); 
+        } else {
+            toast.success(
+                `Cập nhật trạng thái thành công`
+            );
+            refetch(); 
+          }
+        } catch (err) {
+          console.error('Lỗi cập nhật trạng thái:', err);
+          toast.error('Có lỗi xảy ra khi cập nhật trạng thái.');
+        }
+      };
+      
 
     const translateStatus = (status: string) => {
         switch (status) {
@@ -129,8 +141,9 @@ const ListApplicated = ({ params }: { params: { id: string } }) => {
                         <h2 className="text-xl font-semibold mb-2">
                             Công việc: {application.job.title}
                         </h2>
-                        <p className="text-gray-600 mb-2">
-                            <strong>Mô tả:</strong> {application.job.description}
+                        <p className="text-gray-600 mb-2"
+                            dangerouslySetInnerHTML={{ __html: application.job.description }}
+                        >
                         </p>
                         <p className="text-gray-600 mb-2">
                             <strong>Mức lương:</strong>{' '}
